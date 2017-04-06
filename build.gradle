@@ -1,0 +1,103 @@
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+group = 'org.araqnid'
+version = "0.0.${System.getenv("BUILD_NUMBER") ?: 0}"
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': project.description ?: project.name
+        if (version) attributes 'Implementation-Version': version
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://repo.araqnid.org/maven/"
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = "1.8"
+        options.encoding = "UTF-8"
+        options.compilerArgs << "-parameters"
+        options.incremental = true
+        options.deprecation = true
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.java
+    from sourceSets.main.kotlin
+    classifier "sources"
+}
+
+apply plugin: 'maven-publish'
+publishing {
+    repositories {
+        maven {
+            url "https://repo.araqnid.org/maven/"
+            credentials {
+                username = 'repo-user'
+                password = 'repo-password'
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact(sourceJar) {
+                classifier "sources"
+            }
+        }
+    }
+}
+
+dependencies {
+    compile "com.google.guava:guava:21.0"
+    compile "com.google.inject:guice:4.1.0"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.8.0"
+    testCompile "junit:junit:4.12"
+    testCompile "org.hamcrest:hamcrest-library:1.3"
+}
+
+buildscript {
+    ext.kotlinVersion = '1.1.1'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+// SRH- source attachments don't appear in IntelliJ downstream
+//apply plugin: 'ivy-publish'
+//publishing {
+//    repositories {
+//        ivy {
+//            url "$buildDir/repo.ivy-new"
+//        }
+//    }
+//    publications {
+//        ivyJava(IvyPublication) {
+//            from components.java
+//            artifact(sourceJar) {
+//                type "source"
+//                conf "runtime"
+//            }
+//        }
+//    }
+//}
