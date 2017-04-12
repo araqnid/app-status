@@ -13,7 +13,7 @@ task webpack(type: Exec, dependsOn: npmInstall) {
         include '**/*.jsx'
     }
     inputs.files project.file('webpack.config.js')
-    commandLine "node_modules/.bin/webpack", "-p"
+    commandLine "node_modules/.bin/webpack", "-p", "--devtool", "source-map"
 }
 
 task clean {
