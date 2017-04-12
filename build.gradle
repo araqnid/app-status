@@ -9,7 +9,11 @@ jar {
         attributes 'Implementation-Title': project.description ?: project.name
         if (version) attributes 'Implementation-Version': version
     }
+    into('org/araqnid/appstatus/site') {
+        from(project(':ui').buildDir.toPath().resolve("site").toFile())
+    }
 }
+jar.dependsOn(":ui:build")
 
 allprojects {
     repositories {
