@@ -1,15 +1,16 @@
 var webpack = require("webpack");
 var path = require('path');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/main/js/main.jsx',
+    entry: './src/main/web/main.jsx',
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'build/site')
     },
     resolve: {
         alias: {
-            app: path.resolve(__dirname, 'src/main/js')
+            app: path.resolve(__dirname, 'src/main/web')
         },
         extensions: ['.js', '.jsx']
     },
@@ -24,6 +25,10 @@ module.exports = {
                         presets: ['es2015', 'react']
                     }
                 }
+            },
+            {
+                test: /\.css$/,
+                use: [ 'style-loader', 'css-loader' ]
             }
         ]
     },
@@ -33,6 +38,9 @@ module.exports = {
             jQuery: "jquery",
             $: "jquery",
             "window.jQuery": "jquery"
+        }),
+        new HtmlWebpackPlugin({
+            title: "Status"
         })
     ]
 };

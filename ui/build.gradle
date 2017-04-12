@@ -8,7 +8,7 @@ task webpack(type: Exec, dependsOn: npmInstall) {
     outputs.files fileTree(project.file("build/site")) {
         include 'bundle.js'
     }
-    inputs.files fileTree(project.file("src/main/js")) {
+    inputs.files fileTree(project.file("src/main/web")) {
         include '**/*.js'
         include '**/*.jsx'
     }
@@ -23,13 +23,8 @@ task clean {
     }
 }
 
-task staticFiles(type: Copy) {
-    from 'src/main/web'
-    into 'build/site'
+task site(dependsOn: [webpack]) {
 }
 
-task site(dependsOn: [webpack, staticFiles]) {
-}
-
-task build(dependsOn: site) {
+task build(dependsOn: [site]) {
 }
