@@ -1,6 +1,5 @@
 define(['jquery', 'react', 'react-dom',
-        'app/Status', 'app/Bus', 'app/status.css',
-        'bootstrap'],
+        'app/Status', 'app/Bus', 'app/status.css'],
 function status$$init($, React, ReactDOM,
                 Status, Bus) {
     window.BUS = new Bus();

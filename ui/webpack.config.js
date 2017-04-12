@@ -33,12 +33,6 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.ProvidePlugin({
-            // needed by bootstrap (react-bootstrap should allow to drop this?)
-            jQuery: "jquery",
-            $: "jquery",
-            "window.jQuery": "jquery"
-        }),
         new HtmlWebpackPlugin({
             title: "Status"
         })
