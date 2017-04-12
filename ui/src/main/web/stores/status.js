@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import nanoajax from 'nanoajax';
 import MemoBus from 'app/MemoBus';
 
 class Status {
@@ -79,7 +79,7 @@ class Status {
         this._beginVersionRequest();
     }
     _beginStatusRequest() {
-        this.statusRequest = $.ajax({
+        this.statusRequest = this._ajax({
             headers: { accept: 'application/json' },
             url: "/_api/info/status",
             success: (data, status, xhr) => {
@@ -95,7 +95,7 @@ class Status {
         });
     }
     _beginReadinessRequest() {
-        this.readinessRequest = $.ajax({
+        this.readinessRequest = this._ajax({
             headers: { accept: 'text/plain' },
             url: "/_api/info/readiness",
             success: (data, status, xhr) => {
@@ -111,7 +111,7 @@ class Status {
         });
     }
     _beginVersionRequest() {
-        this.versionRequest = $.ajax({
+        this.versionRequest = this._ajax({
             headers: { accept: 'application/json' },
             url: "/_api/info/version",
             success: (data, status, xhr) => {
@@ -138,6 +138,23 @@ class Status {
     }
     _schedule() {
         this.timer = setTimeout(this._timerTick.bind(this), this.refreshInterval);
+    }
+    _ajax(options) {
+        const xhr = nanoajax.ajax({
+            url: options.url,
+            headers: options.headers
+        }, (code, responseText) => {
+            if (code >= 200 && code < 300) {
+                const contentType = xhr.getResponseHeader("Content-Type");
+                const data = contentType === "application/json" ? JSON.parse(responseText) : responseText;
+                options.success(data, code, xhr);
+            }
+            else {
+                options.error(xhr, code, null);
+            }
+            options.complete(xhr, code);
+        });
+        return xhr;
     }
 }
 
