@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-class Bus {
+export default class Bus {
     constructor(name) {
         this.name = name;
         this.subscribers = { dead: [] }
@@ -38,5 +38,3 @@ class Bus {
         return _.sum(counts) === 0;
     }
 }
-
-module.exports = Bus;

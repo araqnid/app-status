@@ -36,7 +36,8 @@ const LoadingStatusDetails = props => {
     }
     return <StatusDetails {...props} />;
 };
-class Status extends React.Component {
+
+export default class Status extends React.Component {
     constructor(props) {
         super(props);
         this.state = { statusPage: null, refreshState: null, readiness: null, version: null, loadingError: null };
@@ -85,5 +86,3 @@ class Status extends React.Component {
         store.unsubscribe(this)
     }
 }
-
-module.exports = Status;

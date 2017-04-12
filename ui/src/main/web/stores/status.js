@@ -158,4 +158,4 @@ class Status {
     }
 }
 
-module.exports = new Status();
+export default new Status();

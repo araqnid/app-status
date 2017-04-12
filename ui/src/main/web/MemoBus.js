@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import Bus from 'app/Bus'
 
-class MemoBus {
+export default class MemoBus {
     constructor(name) {
         this.memory = {};
         this.bus = new Bus(name);
@@ -28,5 +28,3 @@ class MemoBus {
         return this.bus.isEmpty();
     }
 }
-
-module.exports = MemoBus;
