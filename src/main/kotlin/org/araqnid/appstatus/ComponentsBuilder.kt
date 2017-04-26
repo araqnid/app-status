@@ -42,6 +42,7 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
 
     private fun makeComponent(source: Any, method: Method): StatusComponent? {
         val annotation = method.getAnnotation(OnStatusPage::class.java) ?: return null
+        if (method.name.indexOf('$') >= 0) return null
         val id = method.name
         val label = if (annotation.label.isEmpty()) id else annotation.label
         val providers = providersForMethod(method)
