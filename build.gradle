@@ -69,8 +69,8 @@ publishing {
 dependencies {
     compile "com.google.guava:guava:23.0"
     compile "com.google.inject:guice:4.1.0"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8"
-    compile "org.jetbrains.kotlin:kotlin-reflect"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     compile "com.fasterxml.jackson.core:jackson-annotations:2.8.0"
     testCompile "junit:junit:4.12"
     testCompile "org.hamcrest:hamcrest-library:1.3"
