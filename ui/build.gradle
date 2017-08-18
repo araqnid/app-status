@@ -5,14 +5,15 @@ task npmInstall(type: Exec) {
 }
 
 task webpack(type: Exec, dependsOn: npmInstall) {
-    outputs.files fileTree(project.file("build/site")) {
-        include 'bundle.js'
-    }
+    inputs.files project.file("node_modules/.bin/webpack")
     inputs.files fileTree(project.file("src/main/web")) {
         include '**/*.js'
         include '**/*.jsx'
     }
     inputs.files project.file('webpack.config.js')
+    outputs.files project.file("build/site/bundle.js")
+    outputs.files project.file("build/site/bundle.js.map")
+    outputs.files project.file("build/site/index.html")
     commandLine "node_modules/.bin/webpack", "-p", "--devtool", "source-map"
 }
 
