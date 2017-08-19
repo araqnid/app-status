@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import store from 'app/stores/status';
+import store from './stores/status';
 
 const store_kick = store.kick.bind(store);
 const store_pause = store.pause.bind(store);

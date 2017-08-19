@@ -2,17 +2,16 @@ var webpack = require("webpack");
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
+var assetsdir = path.resolve(__dirname, "src/main/web");
+
+var production = process.env.NODE_ENV === "production";
+
 module.exports = {
-    entry: './src/main/web/main.jsx',
+    context: assetsdir,
+    entry: ['./status.css', './main'],
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'build/site')
-    },
-    resolve: {
-        alias: {
-            app: path.resolve(__dirname, 'src/main/web')
-        },
-        extensions: ['.js', '.jsx']
+        path: path.resolve(__dirname, 'build/site'),
+        filename: production ? "[name]-[hash].js" : "[name].js"
     },
     module: {
         rules: [
@@ -29,8 +28,15 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [ 'style-loader', 'css-loader' ]
+            },
+            {
+                test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+                loader: 'url-loader?limit=100000'
             }
         ]
+    },
+    resolve: {
+        extensions: ['.js', '.jsx']
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -38,3 +44,7 @@ module.exports = {
         })
     ]
 };
+
+// Local Variables:
+// compile-command: "node_modules/.bin/webpack -d"
+// End:

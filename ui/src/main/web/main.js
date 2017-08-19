@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Status from 'app/Status';
-import Bus from 'app/Bus';
-import css from 'app/status.css';
+import Status from './Status';
+import Bus from './Bus';
 
 window.BUS = new Bus();
 const elt = document.createElement("div");

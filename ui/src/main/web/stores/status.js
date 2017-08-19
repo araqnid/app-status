@@ -1,5 +1,5 @@
 import nanoajax from 'nanoajax';
-import MemoBus from 'app/MemoBus';
+import MemoBus from '../MemoBus';
 
 class Status {
     constructor() {
