@@ -1,6 +1,9 @@
 task npmInstall(type: Exec) {
     inputs.file project.file("package.json")
-    outputs.files fileTree(project.file("node_modules")) { include '**/package.json' }
+    outputs.files fileTree(project.file("node_modules")) {
+        include '**/package.json'
+        include '.bin/*'
+    }
     commandLine "npm", "install"
 }
 
@@ -8,6 +11,7 @@ task webpack(type: Exec, dependsOn: npmInstall) {
     inputs.files project.file("node_modules/.bin/webpack")
     inputs.files fileTree(project.file("src/main/web")) {
         include '**/*.js'
+        include '**/*.css'
     }
     inputs.files project.file('webpack.config.js')
     outputs.files fileTree(project.file("build/site")) {
