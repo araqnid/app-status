@@ -13,7 +13,7 @@ export default class Bus {
         } else {
             if (console && console.log) console.log((this.name ? this.name : "BUS"), type, data);
         }
-        _.forEach(typeSubscribers, subscriber => {
+        typeSubscribers.forEach(subscriber => {
             const receiver = subscriber[0];
             const actor = subscriber[1];
             receiver.call(actor, data);
@@ -26,15 +26,15 @@ export default class Bus {
         this.subscribers[type].push([receiver, actor]);
     }
     unsubscribe(actor) {
-        _.forOwn(this.subscribers, (typeSubscribers, type) => {
-            _.remove(typeSubscribers, subscriber => subscriber[1] === actor);
-        });
+        for (const type of Object.keys(this.subscribers)) {
+            _.remove(this.subscribers[type], subscriber => subscriber[1] === actor);
+        }
     }
     isEmpty() {
         const counts = [];
-        _.forOwn(this.subscribers, (typeSubscribers, type) => {
-            counts.push(typeSubscribers.length);
-        });
+        for (const type of Object.keys(this.subscribers)) {
+            counts.push(this.subscribers[type].length);
+        }
         return _.sum(counts) === 0;
     }
 }

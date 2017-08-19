@@ -11,9 +11,9 @@ export default class MemoBus {
         this.bus.broadcast(type, payload);
     }
     subscribeAll(handlers, owner) {
-        _.forOwn(handlers, (target, type) => {
-            this.subscribe(type, target, owner);
-        });
+        for (const type of Object.keys(handlers)) {
+            this.subscribe(type, handlers[type], owner);
+        }
     }
     subscribe(type, target, owner) {
         this.bus.subscribe(type, target, owner);

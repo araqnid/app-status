@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import store from './stores/status';
 
 const store_kick = store.kick.bind(store);
@@ -22,9 +21,10 @@ const StatusComponent = props => {
 const StatusDetails = props => {
     const headlineStatus = props.version && props.version.title ? props.version.title + " " + props.version.version + " - " + props.statusPage.status : props.statusPage.status;
     const componentItems = [];
-    _.forOwn(props.statusPage.components, (comp, id) => {
+    for ( const id of Object.keys(props.statusPage.components)) {
+        const comp = props.statusPage.components[id];
         componentItems.push(<StatusComponent key={id} id={id} label={comp.label} priority={comp.priority} text={comp.text} />);
-    });
+    }
     return <div className={ "status-page priority-" + props.statusPage.status.toLowerCase() }>
         <h1>{headlineStatus}</h1>
         <ul>{componentItems}</ul>
