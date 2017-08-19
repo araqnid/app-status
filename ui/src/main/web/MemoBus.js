@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import Bus from './Bus'
 
 export default class MemoBus {

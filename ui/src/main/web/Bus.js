@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export default class Bus {
     constructor(name) {
         this.name = name;
@@ -27,14 +25,14 @@ export default class Bus {
     }
     unsubscribe(actor) {
         for (const type of Object.keys(this.subscribers)) {
-            _.remove(this.subscribers[type], subscriber => subscriber[1] === actor);
+            this.subscribers[type] = this.subscribers[type].filter(subscriber => subscriber[1] !== actor);
         }
     }
     isEmpty() {
-        const counts = [];
         for (const type of Object.keys(this.subscribers)) {
-            counts.push(this.subscribers[type].length);
+            if (this.subscribers[type].length > 0)
+                return false;
         }
-        return _.sum(counts) === 0;
+        return true;
     }
 }
