@@ -6,11 +6,11 @@ mainClassName = 'org.araqnid.appstatus.demo.Main'
 version = '0.0.' + (System.getenv("BUILD_NUMBER") ?: "0")
 
 ext {
-    jettyVersion = '9.4.3.v20170317'
+    jettyVersion = '9.4.7.v20170914'
     jacksonVersion = '2.8.7'
-    resteasyVersion = '3.1.1.Final'
+    resteasyVersion = '3.1.4.Final'
     guiceVersion = '4.1.0'
-    guavaVersion = '21.0'
+    guavaVersion = '23.0'
 }
 
 configurations {
