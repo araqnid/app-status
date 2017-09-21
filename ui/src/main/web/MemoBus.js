@@ -21,7 +21,7 @@ export default class MemoBus {
         }
     }
     unsubscribe(owner) {
-        this.bus.unsubscribe(type, target, owner);
+        this.bus.unsubscribe(owner);
     }
     isEmpty() {
         return this.bus.isEmpty();
