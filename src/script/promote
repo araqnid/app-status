@@ -28,4 +28,4 @@ BUILD_NUMBER=$next_patchnr gradle clean build
 
 git tag -m "Version $next_version" v$next_version
 
-BUILD_NUMBER=$next_patchnr gradle publish
+BUILD_NUMBER=$next_patchnr gradle --no-daemon publish
