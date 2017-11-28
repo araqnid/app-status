@@ -2,16 +2,22 @@ var webpack = require("webpack");
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var assetsdir = path.resolve(__dirname, "src/main/web");
+var assetsDir = path.resolve(__dirname, "src/main/javascript");
 
 var production = process.env.NODE_ENV === "production";
 
 module.exports = {
-    context: assetsdir,
+    context: assetsDir,
     entry: ['./status.css', './main'],
     output: {
         path: path.resolve(__dirname, 'build/site'),
         filename: production ? "[name]-[hash].js" : "[name].js"
+    },
+    devServer: {
+        contentBase: assetsDir,
+        port: 3000,
+        proxy: "http://localhost:8080",
+        hot: true
     },
     module: {
         rules: [

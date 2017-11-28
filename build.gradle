@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "org.jetbrains.kotlin.jvm" version "1.2.0"
+    id "com.timgroup.webpack" version "1.0.1" apply false
 }
 
 group = 'org.araqnid'
@@ -12,7 +13,7 @@ jar {
         if (version) attributes 'Implementation-Version': version
     }
     into('org/araqnid/appstatus/site') {
-        from(project(':ui').buildDir.toPath().resolve("site").toFile())
+        from("ui/build/site")
     }
 }
 jar.dependsOn(":ui:build")
