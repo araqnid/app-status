@@ -10,8 +10,7 @@ data class StatusPage(val status: StatusReport.Priority, val components: Map<Str
             val overallPriority = reports.values.map { it.report.priority }.max()
 
             return StatusPage(when (overallPriority) {
-                StatusReport.Priority.INFO -> StatusReport.Priority.OK
-                null -> StatusReport.Priority.OK
+                StatusReport.Priority.INFO, null -> StatusReport.Priority.OK
                 else -> overallPriority
             }, reports)
         }
