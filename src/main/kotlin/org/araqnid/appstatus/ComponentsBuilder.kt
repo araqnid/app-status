@@ -18,13 +18,9 @@ import kotlin.reflect.jvm.javaType
 class ComponentsBuilder @Inject constructor(val injector: Injector) {
     fun buildStatusComponents(vararg sources: Any): Collection<StatusComponent> {
         val components = mutableListOf<StatusComponent>()
-        for (source in sources) {
-            for (method in source.javaClass.methods) {
-                makeComponent(source, method)?.let(components::add)
-            }
-            for (property in source.javaClass.kotlin.memberProperties) {
-                makeComponentFromProperty(source, property)?.let(components::add)
-            }
+        sources.forEach { source ->
+            source.javaClass.methods.mapNotNullTo(components) { makeComponent(source, it) }
+            source.javaClass.kotlin.memberProperties.mapNotNullTo(components) { makeComponentFromProperty(source, it) }
         }
         return ImmutableList.copyOf(components)
     }
@@ -90,8 +86,7 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
             else -> {
                 val spreaderHandle = methodHandle.asSpreader(Array<Any>::class.java, providers.size + 1);
                 {
-                    val args = arrayOfNulls<Any?>(providers.size)
-                    (0..providers.size - 1).forEach { args[it] = providers[it].get() }
+                    val args = Array<Any?>(providers.size) { providers[it].get() }
                     returnType.cast(spreaderHandle.invoke(source, *args))
                 }
             }
