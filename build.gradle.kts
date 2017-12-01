@@ -75,10 +75,10 @@ repositories {
 dependencies {
     compile("com.google.guava:guava:23.5-jre")
     compile("com.google.inject:guice:4.1.0")
-    compile(kotlin("stdlib-jdk8"))
-    compile(kotlin("reflect"))
+    compile(kotlin("stdlib-jdk8", "1.2.0"))
+    compile(kotlin("reflect", "1.2.0"))
     compile("com.fasterxml.jackson.core:jackson-annotations:2.8.0")
     testCompile("junit:junit:4.12")
     testCompile("org.hamcrest:hamcrest-library:1.3")
-    testCompile(kotlin("test-junit"))
+    testCompile(kotlin("test-junit", "1.2.0"))
 }
