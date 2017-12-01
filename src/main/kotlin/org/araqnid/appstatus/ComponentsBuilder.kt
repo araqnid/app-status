@@ -9,6 +9,7 @@ import java.lang.reflect.Method
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Qualifier
+import kotlin.reflect.KProperty1
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.javaMethod
@@ -16,28 +17,29 @@ import kotlin.reflect.jvm.javaType
 
 class ComponentsBuilder @Inject constructor(val injector: Injector) {
     fun buildStatusComponents(vararg sources: Any): Collection<StatusComponent> {
-        val components = ArrayList<StatusComponent>()
+        val components = mutableListOf<StatusComponent>()
         for (source in sources) {
-            @Suppress("LoopToCallChain")
             for (method in source.javaClass.methods) {
-                val maybeComponent = makeComponent(source, method)
-                if (maybeComponent != null) components.add(maybeComponent)
+                makeComponent(source, method)?.let(components::add)
             }
             for (property in source.javaClass.kotlin.memberProperties) {
-                val annotation = property.findAnnotation<OnStatusPage>() ?: continue
-                val id = property.name
-                val label = if (annotation.label.isEmpty()) id else annotation.label
-                val method = property.getter.javaMethod ?: throw IllegalStateException("No getter for $property")
-                val providers = providersForMethod(method)
-                val component = when (property.returnType.javaType) {
-                    StatusReport::class.java -> StatusComponent.from(id, label, wrapInvocation(StatusReport::class.java, method, source, providers))
-                    String::class.java -> StatusComponent.info(id, label, wrapInvocation(String::class.java, method, source, providers))
-                    else -> throw IllegalStateException("Invalid type from @OnStatusPage property: $property")
-                }
-                components.add(component)
+                makeComponentFromProperty(source, property)?.let(components::add)
             }
         }
         return ImmutableList.copyOf(components)
+    }
+
+    private fun makeComponentFromProperty(source: Any, property: KProperty1<*, *>): StatusComponent? {
+        val annotation = property.findAnnotation<OnStatusPage>() ?: return null
+        val id = property.name
+        val label = if (annotation.label.isEmpty()) id else annotation.label
+        val method = property.getter.javaMethod ?: throw IllegalStateException("No getter for $property")
+        val providers = providersForMethod(method)
+        return when (property.returnType.javaType) {
+            StatusReport::class.java -> StatusComponent.from(id, label, wrapInvocation(StatusReport::class.java, method, source, providers))
+            String::class.java -> StatusComponent.info(id, label, wrapInvocation(String::class.java, method, source, providers))
+            else -> throw IllegalStateException("Invalid type from @OnStatusPage property: $property")
+        }
     }
 
     private fun makeComponent(source: Any, method: Method): StatusComponent? {
