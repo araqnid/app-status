@@ -36,9 +36,11 @@ repositories {
     mavenCentral()
 }
 
-//configurations {
-//    testCompile.exclude module: 'logback-classic'
-//}
+configurations {
+    "testCompile" {
+        exclude(module = "logback-classic")
+    }
+}
 
 dependencies {
     compile(rootProject)
