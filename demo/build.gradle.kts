@@ -42,6 +42,8 @@ repositories {
 
 dependencies {
     compile(rootProject)
+    implementation(kotlin("stdlib-jdk8", "1.2.0"))
+    implementation(kotlin("reflect", "1.2.0"))
     compile("org.slf4j:slf4j-api:1.7.25")
     compile("org.eclipse.jetty:jetty-server:$jettyVersion")
     compile("org.eclipse.jetty:jetty-servlet:$jettyVersion")
