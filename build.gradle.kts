@@ -42,6 +42,10 @@ tasks {
             attributes["Implementation-Title"] = project.description ?: project.name
             attributes["Implementation-Version"] = project.version
         }
+        into("org/araqnid/appstatus/site") {
+            from("ui/build/site")
+        }
+        dependsOn(":ui:webpack")
     }
 }
 
