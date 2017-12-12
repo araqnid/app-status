@@ -36,7 +36,7 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
         return when (property.returnType.javaType) {
             StatusReport::class.java -> StatusComponent.from(id, label, wrapInvocation(StatusReport::class.java, method, source, providers))
             String::class.java -> StatusComponent.info(id, label, wrapInvocation(String::class.java, method, source, providers))
-            else -> throw IllegalStateException("Invalid type from @OnStatusPage property: $property")
+            else -> throw IllegalStateException("Invalid type from @OnStatusPage property $property: ${property.returnType.javaType}")
         }
     }
 
@@ -50,7 +50,7 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
         return when (function.returnType.javaType) {
             StatusReport::class.java -> StatusComponent.from(id, label, wrapInvocation(StatusReport::class.java, method, source, providers))
             String::class.java -> StatusComponent.info(id, label, wrapInvocation(String::class.java, method, source, providers))
-            else -> throw IllegalStateException("Invalid return type from @OnStatusPage function: $method")
+            else -> throw IllegalStateException("Invalid return type from @OnStatusPage function $function: ${function.returnType.javaType}")
         }
     }
 
