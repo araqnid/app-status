@@ -9,8 +9,10 @@ import java.lang.reflect.Method
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Qualifier
+import kotlin.reflect.KFunction
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.functions
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.javaMethod
 import kotlin.reflect.jvm.javaType
@@ -19,7 +21,7 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
     fun buildStatusComponents(vararg sources: Any): Collection<StatusComponent> {
         val components = mutableListOf<StatusComponent>()
         sources.forEach { source ->
-            source.javaClass.methods.mapNotNullTo(components) { makeComponent(source, it) }
+            source.javaClass.kotlin.functions.mapNotNullTo(components) { makeComponentFromFunction(source, it) }
             source.javaClass.kotlin.memberProperties.mapNotNullTo(components) { makeComponentFromProperty(source, it) }
         }
         return ImmutableList.copyOf(components)
@@ -38,13 +40,14 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
         }
     }
 
-    private fun makeComponent(source: Any, method: Method): StatusComponent? {
-        val annotation = method.getAnnotation(OnStatusPage::class.java) ?: return null
-        if (method.name.indexOf('$') >= 0) return null
-        val id = method.name
+    private fun makeComponentFromFunction(source: Any, function: KFunction<*>): StatusComponent? {
+        val annotation = function.findAnnotation<OnStatusPage>() ?: return null
+        if (function.name.indexOf('$') >= 0) return null
+        val id = function.name
         val label = if (annotation.label.isEmpty()) id else annotation.label
+        val method = function.javaMethod ?: throw IllegalStateException("No method for $function")
         val providers = providersForMethod(method)
-        return when (method.returnType) {
+        return when (function.returnType.javaType) {
             StatusReport::class.java -> StatusComponent.from(id, label, wrapInvocation(StatusReport::class.java, method, source, providers))
             String::class.java -> StatusComponent.info(id, label, wrapInvocation(String::class.java, method, source, providers))
             else -> throw IllegalStateException("Invalid return type from @OnStatusPage function: $method")
