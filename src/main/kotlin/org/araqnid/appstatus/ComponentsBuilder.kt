@@ -52,22 +52,18 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
     }
 
     private fun providersForMethod(method: Method): Array<Provider<*>> {
-        val providers = ArrayList<Provider<*>>()
-        (0..method.parameterCount - 1)
-                .map { index ->
-                    val type = method.genericParameterTypes[index]
-                    val annotations: Array<Annotation> = method.parameterAnnotations[index]
-                    val qualifier = annotations.find { paramAnnotation ->
-                        val metaAnnotations = paramAnnotation.annotationClass.annotations
-                        metaAnnotations.count { it is Qualifier || it is BindingAnnotation } > 0
-                    }
-                    if (qualifier == null)
-                        Key.get(type)
-                    else
-                        Key.get(type, qualifier)
-                }
-                .mapTo(providers) { injector.getProvider(it) }
-        return providers.toTypedArray()
+        return Array(method.parameterCount) { index ->
+            val type = method.genericParameterTypes[index]
+            val qualifier = method.parameterAnnotations[index].find { paramAnnotation ->
+                val metaAnnotations = paramAnnotation.annotationClass.annotations
+                metaAnnotations.count { it is Qualifier || it is BindingAnnotation } > 0
+            }
+            val key = if (qualifier == null)
+                Key.get(type)
+            else
+                Key.get(type, qualifier)
+            injector.getProvider(key)
+        }
     }
 
     private fun <T> wrapInvocation(returnType: Class<T>, method: Method, source: Any, providers: Array<Provider<*>>): () -> T {
