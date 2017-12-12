@@ -107,3 +107,11 @@ Displaying the data
 
 As mentioned, the demo shows how these data can be presented using some simple servlets. It may be better to recruit
 `$your_framework` here, the library is agnostic about that. (Although not about dependency injection, currently)
+
+Example app
+-----------
+
+The app on https://fuel.araqnid.org/
+
+- See the status page at https://fuel.araqnid.org/_status/
+- See the source at https://github.com/araqnid/fuel-log/
