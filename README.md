@@ -116,6 +116,22 @@ The app on https://fuel.araqnid.org/
 - See the status page at https://fuel.araqnid.org/_status/
 - See the source at https://github.com/araqnid/fuel-log/
 
+Get the library
+---------------
+
+App-Status is published on [JCenter](https://bintray.com/bintray/jcenter). You need something like this in
+`build.gradle` or `build.gradle.kts`:
+
+```kotlin
+repositories {
+    jcenter()
+}
+dependencies {
+    compile("org.araqnid:app-status:0.0.13")
+}
+```
+
+ 
 Related projects
 ----------------
 
