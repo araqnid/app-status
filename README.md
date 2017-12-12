@@ -115,3 +115,8 @@ The app on https://fuel.araqnid.org/
 
 - See the status page at https://fuel.araqnid.org/_status/
 - See the source at https://github.com/araqnid/fuel-log/
+
+Related projects
+----------------
+
+Largely inspired by Tucker: https://github.com/tim-group/Tucker
