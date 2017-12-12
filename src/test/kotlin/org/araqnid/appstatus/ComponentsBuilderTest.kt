@@ -3,7 +3,9 @@ package org.araqnid.appstatus
 import com.google.inject.AbstractModule
 import com.google.inject.Binder
 import com.google.inject.Guice
+import com.google.inject.Key
 import com.google.inject.Module
+import com.google.inject.TypeLiteral
 import com.google.inject.name.Names
 import com.natpryce.hamkrest.and
 import com.natpryce.hamkrest.assertion.assertThat
@@ -124,6 +126,25 @@ class ComponentsBuilderTest {
         ))
     }
 
+    @Test fun component_returning_string_from_one_parameterised_arg() {
+        val value = "xyzzy"
+        val injector = Guice.createInjector(Module(Binder::requireExplicitBindings), object : AbstractModule() {
+            override fun configure() {
+                bind(Key.get(object : TypeLiteral<ParameterisedTest<@JvmSuppressWildcards String>>(){})).toInstance(ParameterisedTest(value))
+            }
+        })
+        val componentsBuilder = ComponentsBuilder(injector)
+        val statusComponents = componentsBuilder.buildStatusComponents(object {
+            @OnStatusPage
+            fun parameterisedString(v: ParameterisedTest<String>) = "text: ${v.value}"
+        })
+        assertThat(statusComponents, containsOnly(
+                has(StatusComponent::id, equalTo("parameterisedString"))
+                        and has(StatusComponent::label, equalTo("parameterisedString"))
+                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "text: $value")))
+        ))
+    }
+
     @Test fun component_returning_string_from_two_args() {
         val alphaValue = "xyzzy"
         val betaValue = "abcde"
@@ -189,4 +210,6 @@ class ComponentsBuilderTest {
 
     @Qualifier
     annotation class TestAnnotation
+
+    data class ParameterisedTest<out T>(val value: T)
 }
