@@ -1,7 +1,7 @@
 package org.araqnid.appstatus
 
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.equalTo
+import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.equalTo
 import org.junit.Test
 
 class StatusPageTest {

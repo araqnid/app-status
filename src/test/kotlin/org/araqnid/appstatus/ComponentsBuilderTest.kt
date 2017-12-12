@@ -5,9 +5,10 @@ import com.google.inject.Binder
 import com.google.inject.Guice
 import com.google.inject.Module
 import com.google.inject.name.Names
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.hasSize
+import com.natpryce.hamkrest.and
+import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.equalTo
+import com.natpryce.hamkrest.has
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -24,10 +25,11 @@ class ComponentsBuilderTest {
             @OnStatusPage
             val fixedString = "test text"
         })
-        assertThat(statusComponents, hasSize(1))
-        assertThat(statusComponents.toList()[0].id, equalTo("fixedString"))
-        assertThat(statusComponents.toList()[0].label, equalTo("fixedString"))
-        assertThat(statusComponents.toList()[0].report(), equalTo(StatusReport(StatusReport.Priority.INFO, "test text")))
+        assertThat(statusComponents, containsOnly(
+                has(StatusComponent::id, equalTo("fixedString"))
+                           and has(StatusComponent::label, equalTo("fixedString"))
+                           and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "test text")))
+        ))
     }
 
     @Test fun component_returning_report_from_property() {
@@ -37,10 +39,11 @@ class ComponentsBuilderTest {
             @OnStatusPage
             val fixedReport = StatusReport(StatusReport.Priority.OK, "test report")
         })
-        assertThat(statusComponents, hasSize(1))
-        assertThat(statusComponents.toList()[0].id, equalTo("fixedReport"))
-        assertThat(statusComponents.toList()[0].label, equalTo("fixedReport"))
-        assertThat(statusComponents.toList()[0].report(), equalTo(StatusReport(StatusReport.Priority.OK, "test report")))
+        assertThat(statusComponents, containsOnly(
+                has(StatusComponent::id, equalTo("fixedReport"))
+                        and has(StatusComponent::label, equalTo("fixedReport"))
+                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.OK, "test report")))
+        ))
     }
 
     @Test fun component_returning_string_from_property_with_get_accessor() {
@@ -51,10 +54,11 @@ class ComponentsBuilderTest {
             val fixedString
                 get() = "test text"
         })
-        assertThat(statusComponents, hasSize(1))
-        assertThat(statusComponents.toList()[0].id, equalTo("fixedString"))
-        assertThat(statusComponents.toList()[0].label, equalTo("fixedString"))
-        assertThat(statusComponents.toList()[0].report(), equalTo(StatusReport(StatusReport.Priority.INFO, "test text")))
+        assertThat(statusComponents, containsOnly(
+                has(StatusComponent::id, equalTo("fixedString"))
+                        and has(StatusComponent::label, equalTo("fixedString"))
+                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "test text")))
+        ))
     }
 
     @Test fun component_returning_report_from_property_with_get_accessor() {
@@ -65,10 +69,11 @@ class ComponentsBuilderTest {
             val fixedReport
                 get() = StatusReport(StatusReport.Priority.OK, "test report")
         })
-        assertThat(statusComponents, hasSize(1))
-        assertThat(statusComponents.toList()[0].id, equalTo("fixedReport"))
-        assertThat(statusComponents.toList()[0].label, equalTo("fixedReport"))
-        assertThat(statusComponents.toList()[0].report(), equalTo(StatusReport(StatusReport.Priority.OK, "test report")))
+        assertThat(statusComponents, containsOnly(
+                has(StatusComponent::id, equalTo("fixedReport"))
+                        and has(StatusComponent::label, equalTo("fixedReport"))
+                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.OK, "test report")))
+        ))
     }
 
     @Test fun component_returning_string_from_no_args() {
@@ -78,10 +83,11 @@ class ComponentsBuilderTest {
             @OnStatusPage
             fun fixedString() = "test text"
         })
-        assertThat(statusComponents, hasSize(1))
-        assertThat(statusComponents.toList()[0].id, equalTo("fixedString"))
-        assertThat(statusComponents.toList()[0].label, equalTo("fixedString"))
-        assertThat(statusComponents.toList()[0].report(), equalTo(StatusReport(StatusReport.Priority.INFO, "test text")))
+        assertThat(statusComponents, containsOnly(
+                has(StatusComponent::id, equalTo("fixedString"))
+                        and has(StatusComponent::label, equalTo("fixedString"))
+                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "test text")))
+        ))
     }
 
     @Test fun component_returning_report_from_no_args() {
@@ -91,10 +97,11 @@ class ComponentsBuilderTest {
             @OnStatusPage
             fun fixedReport() = StatusReport(StatusReport.Priority.OK, "test report")
         })
-        assertThat(statusComponents, hasSize(1))
-        assertThat(statusComponents.toList()[0].id, equalTo("fixedReport"))
-        assertThat(statusComponents.toList()[0].label, equalTo("fixedReport"))
-        assertThat(statusComponents.toList()[0].report(), equalTo(StatusReport(StatusReport.Priority.OK, "test report")))
+        assertThat(statusComponents, containsOnly(
+                has(StatusComponent::id, equalTo("fixedReport"))
+                        and has(StatusComponent::label, equalTo("fixedReport"))
+                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.OK, "test report")))
+        ))
     }
 
     @Test fun component_returning_string_from_one_arg() {
@@ -110,10 +117,11 @@ class ComponentsBuilderTest {
             @OnStatusPage
             fun parameterisedString(v: Test) = "text: ${v.value}"
         })
-        assertThat(statusComponents, hasSize(1))
-        assertThat(statusComponents.toList()[0].id, equalTo("parameterisedString"))
-        assertThat(statusComponents.toList()[0].label, equalTo("parameterisedString"))
-        assertThat(statusComponents.toList()[0].report(), equalTo(StatusReport(StatusReport.Priority.INFO, "text: $value")))
+        assertThat(statusComponents, containsOnly(
+                has(StatusComponent::id, equalTo("parameterisedString"))
+                        and has(StatusComponent::label, equalTo("parameterisedString"))
+                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "text: $value")))
+        ))
     }
 
     @Test fun component_returning_string_from_two_args() {
@@ -132,10 +140,11 @@ class ComponentsBuilderTest {
             @OnStatusPage
             fun parameterisedString(a: Alpha, b: Beta) = "text: ${a.value} - ${b.value}"
         })
-        assertThat(statusComponents, hasSize(1))
-        assertThat(statusComponents.toList()[0].id, equalTo("parameterisedString"))
-        assertThat(statusComponents.toList()[0].label, equalTo("parameterisedString"))
-        assertThat(statusComponents.toList()[0].report(), equalTo(StatusReport(StatusReport.Priority.INFO, "text: $alphaValue - $betaValue")))
+        assertThat(statusComponents, containsOnly(
+                has(StatusComponent::id, equalTo("parameterisedString"))
+                        and has(StatusComponent::label, equalTo("parameterisedString"))
+                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "text: $alphaValue - $betaValue")))
+        ))
     }
 
     @Test fun parameter_qualifying_annotation_instance_used() {
@@ -151,10 +160,11 @@ class ComponentsBuilderTest {
             @OnStatusPage
             fun parameterisedString(@Named("test") v: Test) = "text: ${v.value}"
         })
-        assertThat(statusComponents, hasSize(1))
-        assertThat(statusComponents.toList()[0].id, equalTo("parameterisedString"))
-        assertThat(statusComponents.toList()[0].label, equalTo("parameterisedString"))
-        assertThat(statusComponents.toList()[0].report(), equalTo(StatusReport(StatusReport.Priority.INFO, "text: $value")))
+        assertThat(statusComponents, containsOnly(
+                has(StatusComponent::id, equalTo("parameterisedString"))
+                        and has(StatusComponent::label, equalTo("parameterisedString"))
+                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "text: $value")))
+        ))
     }
 
     @Test fun parameter_qualifying_annotation_class_used() {
@@ -170,10 +180,11 @@ class ComponentsBuilderTest {
             @OnStatusPage
             fun parameterisedString(@TestAnnotation v: Test) = "text: ${v.value}"
         })
-        assertThat(statusComponents, hasSize(1))
-        assertThat(statusComponents.toList()[0].id, equalTo("parameterisedString"))
-        assertThat(statusComponents.toList()[0].label, equalTo("parameterisedString"))
-        assertThat(statusComponents.toList()[0].report(), equalTo(StatusReport(StatusReport.Priority.INFO, "text: $value")))
+        assertThat(statusComponents, containsOnly(
+                has(StatusComponent::id, equalTo("parameterisedString"))
+                        and has(StatusComponent::label, equalTo("parameterisedString"))
+                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "text: $value")))
+        ))
     }
 
     @Qualifier

@@ -33,7 +33,7 @@ val guiceVersion by extra { "4.1.0" }
 val guavaVersion by extra { "23.0" }
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 configurations {

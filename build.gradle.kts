@@ -72,8 +72,8 @@ publishing {
 }
 
 repositories {
-    mavenCentral()
-    maven(url = "https://repo.araqnid.org/maven/")
+    jcenter()
+    maven(url = "https://dl.bintray.com/araqnid/maven")
 }
 
 dependencies {
@@ -83,6 +83,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8", "1.2.0"))
     implementation(kotlin("reflect", "1.2.0"))
     testCompile("junit:junit:4.12")
-    testCompile("org.hamcrest:hamcrest-library:1.3")
+    testCompile("com.natpryce:hamkrest:1.4.2.2")
+    testCompile("org.araqnid:hamkrest-json:1.0.3")
     testCompile(kotlin("test-junit", "1.2.0"))
 }
