@@ -3,34 +3,23 @@ import java.io.ByteArrayOutputStream
 plugins {
     application
     java
-}
-
-apply {
-    plugin("org.jetbrains.kotlin.jvm")
+    kotlin("jvm")
 }
 
 application {
     mainClassName = "org.araqnid.appstatus.demo.Main"
 }
 
-group = "org.araqnid"
-version = (fun (): String {
-    val capture = ByteArrayOutputStream()
-    project.exec {
-        commandLine("git", "describe", "--tags")
-        standardOutput = capture
-    }
-    return String(capture.toByteArray())
-            .trim()
-            .removePrefix("v")
-            .replace('-', '.')
-})()
+val gitVersion: String by rootProject.extra
 
-val jettyVersion by extra { "9.4.7.v20170914" }
-val jacksonVersion by extra { "2.9.2" }
-val resteasyVersion by extra { "3.1.4.Final" }
-val guiceVersion by extra { "4.1.0" }
-val guavaVersion by extra { "23.0" }
+group = "org.araqnid"
+version = gitVersion
+
+val jettyVersion: String by rootProject.extra
+val jacksonVersion: String by rootProject.extra
+val resteasyVersion: String by rootProject.extra
+val guiceVersion: String by rootProject.extra
+val guavaVersion: String by rootProject.extra
 
 repositories {
     jcenter()
@@ -43,19 +32,19 @@ configurations {
 }
 
 dependencies {
-    compile(rootProject)
-    implementation(kotlin("stdlib-jdk8", "1.2.0"))
-    implementation(kotlin("reflect", "1.2.0"))
-    compile("org.slf4j:slf4j-api:1.7.25")
-    compile("org.eclipse.jetty:jetty-server:$jettyVersion")
-    compile("org.eclipse.jetty:jetty-servlet:$jettyVersion")
-    compile("org.jboss.resteasy:resteasy-jaxrs:$resteasyVersion")
-    compile("org.jboss.resteasy:resteasy-guice:$resteasyVersion")
-    compile("com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:$jacksonVersion")
-    compile("com.fasterxml.jackson.module:jackson-module-guice:$jacksonVersion")
-    compile("com.fasterxml.jackson.datatype:jackson-datatype-guava:$jacksonVersion")
-    compile("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion")
-    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-    compile("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    runtime("org.slf4j:slf4j-simple:1.7.21")
+    implementation(rootProject)
+    implementation(kotlin("stdlib-jdk8", "1.2.10"))
+    implementation(kotlin("reflect", "1.2.10"))
+    implementation("org.slf4j:slf4j-api:1.7.25")
+    implementation("org.eclipse.jetty:jetty-server:$jettyVersion")
+    implementation("org.eclipse.jetty:jetty-servlet:$jettyVersion")
+    implementation("org.jboss.resteasy:resteasy-jaxrs:$resteasyVersion")
+    implementation("org.jboss.resteasy:resteasy-guice:$resteasyVersion")
+    implementation("com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:$jacksonVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-guice:$jacksonVersion")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-guava:$jacksonVersion")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    runtimeOnly("org.slf4j:slf4j-simple:1.7.21")
 }

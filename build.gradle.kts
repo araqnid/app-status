@@ -2,9 +2,9 @@ import java.io.ByteArrayOutputStream
 
 plugins {
     java
-    kotlin("jvm") version "1.2.0"
+    kotlin("jvm") version "1.2.10"
     `maven-publish`
-    id("com.timgroup.webpack") version "1.0.1" apply false
+    id("com.timgroup.webpack") version "1.0.12" apply false
     id("com.jfrog.bintray") version "1.7.3"
 }
 
@@ -23,27 +23,32 @@ val gitVersion by extra {
 group = "org.araqnid"
 version = gitVersion
 
-val guavaVersion by extra { "23.5-jre" }
+val guavaVersion by extra("23.6-jre")
+val jettyVersion by extra("9.4.8.v20171121")
+val jacksonVersion by extra("2.9.3")
+val resteasyVersion by extra("3.1.4.Final")
+val guiceVersion by extra("4.1.0")
 
 repositories {
     jcenter()
 }
 
 dependencies {
-    compile("com.google.guava:guava:23.5-jre")
-    compile("com.google.inject:guice:4.1.0")
+    compile("com.google.inject:guice:$guiceVersion")
     compile("com.fasterxml.jackson.core:jackson-annotations:2.8.0")
-    implementation(kotlin("stdlib-jdk8", "1.2.0"))
-    implementation(kotlin("reflect", "1.2.0"))
-    testCompile("junit:junit:4.12")
-    testCompile("com.natpryce:hamkrest:1.4.2.2")
-    testCompile("org.araqnid:hamkrest-json:1.0.3")
-    testCompile(kotlin("test-junit", "1.2.0"))
+    implementation("com.google.guava:guava:$guavaVersion")
+    implementation(kotlin("stdlib-jdk8", "1.2.10"))
+    implementation(kotlin("reflect", "1.2.10"))
+    testImplementation("junit:junit:4.12")
+    testImplementation("com.natpryce:hamkrest:1.4.2.2")
+    testImplementation("org.araqnid:hamkrest-json:1.0.3")
+    testImplementation(kotlin("test-junit", "1.2.10"))
 }
 
 tasks {
     withType<JavaCompile> {
-        sourceCompatibility = "1.9"
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
         options.encoding = "UTF-8"
         options.compilerArgs.add("-parameters")
         options.isIncremental = true
