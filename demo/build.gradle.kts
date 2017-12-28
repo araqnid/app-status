@@ -2,7 +2,7 @@ import java.io.ByteArrayOutputStream
 
 plugins {
     application
-    java
+    `java-library`
     kotlin("jvm")
 }
 

@@ -4,6 +4,7 @@ plugins {
     java
     kotlin("jvm") version "1.2.10"
     `maven-publish`
+    `java-library`
     id("com.timgroup.webpack") version "1.0.12" apply false
     id("com.jfrog.bintray") version "1.7.3"
 }
@@ -34,8 +35,8 @@ repositories {
 }
 
 dependencies {
-    compile("com.google.inject:guice:$guiceVersion")
-    compile("com.fasterxml.jackson.core:jackson-annotations:2.8.0")
+    api("com.google.inject:guice:$guiceVersion")
+    api("com.fasterxml.jackson.core:jackson-annotations:2.8.0")
     implementation("com.google.guava:guava:$guavaVersion")
     implementation(kotlin("stdlib-jdk8", "1.2.10"))
     implementation(kotlin("reflect", "1.2.10"))
