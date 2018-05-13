@@ -9,6 +9,7 @@ const production = process.env.NODE_ENV === "production";
 module.exports = {
     context: assetsDir,
     entry: './main',
+    mode: production ? "production" : "development",
     output: {
         path: path.resolve(__dirname, 'build/site'),
         filename: production ? "[name]-[hash].js" : "[name].js"
