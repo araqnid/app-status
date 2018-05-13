@@ -8,7 +8,7 @@ const production = process.env.NODE_ENV === "production";
 
 module.exports = {
     context: assetsDir,
-    entry: ['./status.css', './main'],
+    entry: './main',
     output: {
         path: path.resolve(__dirname, 'build/site'),
         filename: production ? "[name]-[hash].js" : "[name].js"
@@ -26,7 +26,8 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: [['env', { modules: false }], 'react']
+                        presets: [['env', { modules: false }], 'react'],
+                        plugins: ["transform-object-rest-spread"]
                     }
                 }
             },

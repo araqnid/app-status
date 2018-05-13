@@ -1,88 +1,76 @@
 import React from 'react';
-import store from './stores/status';
-
-const store_kick = store.kick.bind(store);
-const store_pause = store.pause.bind(store);
-const store_unpause = store.unpause.bind(store);
-const RefreshState = props => {
-    if (props.paused) {
-        return <div id="refresh-state" className="paused"><button onClick={store_kick}>Refresh</button><button onClick={store_unpause}>Start auto-refresh</button></div>;
-    }
-    else {
-        return <div id="refresh-state" className="unpaused">Auto-refresh interval: {props.interval} <button onClick={store_pause}>Stop auto-refresh</button></div>;
-    }
-};
-const StatusComponent = props => {
-    return <li className={ "status-component priority-" + props.priority.toLowerCase() }>
-        <span className="label">{props.priority === "INFO" ? props.label : props.label + " - " + props.priority}</span>
-        <span className="value">{props.text}</span>
-    </li>;
-};
-const StatusDetails = props => {
-    const headlineStatus = props.version && props.version.title ? props.version.title + " " + props.version.version + " - " + props.statusPage.status : props.statusPage.status;
-    const componentItems = [];
-    for ( const id of Object.keys(props.statusPage.components)) {
-        const comp = props.statusPage.components[id];
-        componentItems.push(<StatusComponent key={id} id={id} label={comp.label} priority={comp.priority} text={comp.text} />);
-    }
-    return <div className={ "status-page priority-" + props.statusPage.status.toLowerCase() }>
-        <h1>{headlineStatus}</h1>
-        <ul>{componentItems}</ul>
-    </div>;
-};
-const LoadingStatusDetails = props => {
-    if (!props.statusPage || !props.version) {
-        return <div>Loading...</div>;
-    }
-    return <StatusDetails {...props} />;
-};
+import statusObservable from "./statusObservable";
+import {LoadingStatusDetails} from "./StatusDetails";
+import {RefreshState} from "./RefreshState";
 
 export default class Status extends React.Component {
     constructor(props) {
         super(props);
         this.state = { statusPage: null, refreshState: null, readiness: null, version: null, loadingError: null };
+        this._subscription = null;
+        this._controls = null;
     }
+
     render() {
         if (!this.state.refreshState) {
-            return <div key="absent"></div>;
+            return <div key="absent"/>;
         }
+
         if (this.state.loadingError !== null) {
             return <div key="error">Failed to load status: { this.state.loadingError }</div>;
         }
-        return <div key="present">
-            <LoadingStatusDetails version={this.state.version} statusPage={this.state.statusPage} />
-            { this.state.readiness !== null && this.state.readiness.toLowerCase() === "ready"
-                ? <div className="readiness readiness-ready">Application ready</div>
-                : <div className="readiness readiness-other">Application NOT ready</div> }
-            <RefreshState {...this.state.refreshState} />
-        </div>;
+
+        return (
+            <div key="present">
+                <LoadingStatusDetails
+                    version={this.state.version} statusPage={this.state.statusPage} readiness={this.state.readiness}
+                />
+                <RefreshState {...this.state.refreshState}
+                              store_pause={() => this._controls.pause()}
+                              store_unpause={() => this._controls.unpause()}
+                              store_kick={() => this._controls.kick()}
+                />
+            </div>
+        );
     }
+
     componentDidMount() {
-        store.subscribe({
-            status: d => {
-                this.setState({ statusPage: d, loadingError: null })
+        this._subscription = statusObservable.subscribe(
+            ({ type, payload, error = false }) => {
+                if (error) {
+                    this.setState({ status: null, version: null, readiness: null, loadingError: payload });
+                }
+                else {
+                    switch (type) {
+                        case "_controls":
+                            this._controls = payload;
+                            break;
+                        case "refreshState":
+                            this.setState({ refreshState: payload });
+                            break;
+                        case "status":
+                            this.setState({ statusPage : payload, loadingError: null });
+                            break;
+                        case "version":
+                            this.setState({ version : payload, loadingError: null });
+                            break;
+                        case "readiness":
+                            this.setState({ readiness : payload, loadingError: null });
+                            break;
+                    }
+                }
             },
-            readiness: d => {
-                this.setState({ readiness: d, loadingError: null })
+            error => {
+                console.error("status observable terminated with error", error);
             },
-            version: d => {
-                this.setState({ version: d, loadingError: null })
-            },
-            "status.error": ex => {
-                this.setState({ status: null, version: null, readiness: null, loadingError: ex })
-            },
-            "readiness.error": ex => {
-                this.setState({ status: null, version: null, readiness: null, loadingError: ex })
-            },
-            "version.error": ex => {
-                this.setState({ status: null, version: null, readiness: null, loadingError: ex })
-            },
-            refreshState: d => {
-                this.setState({ refreshState: d })
+            () => {
+                console.error("status observable terminated")
             }
-        }, this)
+        );
     }
+
     componentWillUnmount() {
-        store.unsubscribe(this)
+        if (this._subscription)
+            this._subscription.unsubscribe();
     }
 }
