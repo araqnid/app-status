@@ -1,10 +1,10 @@
-var webpack = require("webpack");
-var path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require("webpack");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var assetsDir = path.resolve(__dirname, "src/main/javascript");
+const assetsDir = path.resolve(__dirname, "src/main/javascript");
 
-var production = process.env.NODE_ENV === "production";
+const production = process.env.NODE_ENV === "production";
 
 module.exports = {
     context: assetsDir,
@@ -16,8 +16,7 @@ module.exports = {
     devServer: {
         contentBase: assetsDir,
         port: 3000,
-        proxy: "http://localhost:8080",
-        hot: true
+        proxy: { "*" : "http://localhost:8080" }
     },
     module: {
         rules: [
