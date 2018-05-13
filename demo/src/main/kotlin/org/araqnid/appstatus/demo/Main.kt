@@ -17,7 +17,7 @@ object Main {
     @JvmStatic fun main(args: Array<String>) {
         val jettyServer = Server(System.getenv("PORT")?.toInt() ?: 8080)
         val servletContext = ServletContextHandler()
-        servletContext.resourceBase = "../ui/build/site"
+        servletContext.resourceBase = System.getenv("DOCUMENT_ROOT") ?: "ui/build/site"
         servletContext.addServlet(ServletHolder(StatusServlet(statusComponents)), "/_api/info/status")
         servletContext.addServlet(ServletHolder(ReadinessServlet(Readiness.READY)), "/_api/info/readiness")
         servletContext.addServlet(ServletHolder(VersionServlet(AppVersion(null, null, null))), "/_api/info/version")

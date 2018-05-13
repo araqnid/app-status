@@ -5,7 +5,7 @@ plugins {
     kotlin("jvm") version "1.2.41"
     `maven-publish`
     `java-library`
-    id("com.timgroup.webpack") version "1.0.12" apply false
+    id("com.timgroup.webpack") version "1.0.37" apply false
     id("com.jfrog.bintray") version "1.7.3"
 }
 
@@ -30,6 +30,8 @@ val jacksonVersion by extra("2.9.3")
 val resteasyVersion by extra("3.1.4.Final")
 val guiceVersion by extra("4.1.0")
 
+val web by configurations.creating
+
 repositories {
     jcenter()
 }
@@ -44,6 +46,7 @@ dependencies {
     testImplementation("com.natpryce:hamkrest:1.4.2.2")
     testImplementation("org.araqnid:hamkrest-json:1.0.3")
     testImplementation(kotlin("test-junit", "1.2.10"))
+    web(project("ui", "web"))
 }
 
 tasks {
@@ -68,9 +71,8 @@ tasks {
             attributes["Implementation-Version"] = project.version
         }
         into("org/araqnid/appstatus/site") {
-            from("ui/build/site")
+            from(web)
         }
-        dependsOn(":ui:webpack")
     }
 }
 
@@ -100,6 +102,6 @@ bintray {
     pkg.desc = "Expose health check results and some metadata on a single app page"
     pkg.version.name = gitVersion
     if (!gitVersion.contains(".g")) {
-        pkg.version.vcsTag = "v" + gitVersion
+        pkg.version.vcsTag = "v$gitVersion"
     }
 }

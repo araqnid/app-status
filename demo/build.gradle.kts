@@ -21,6 +21,8 @@ val resteasyVersion: String by rootProject.extra
 val guiceVersion: String by rootProject.extra
 val guavaVersion: String by rootProject.extra
 
+val web by configurations.creating
+
 repositories {
     jcenter()
 }
@@ -47,4 +49,21 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     runtimeOnly("org.slf4j:slf4j-simple:1.7.21")
+    web(project(":ui", "web"))
+}
+
+tasks {
+    "run"(JavaExec::class) {
+        dependsOn(web)
+        val webDir = buildDir.resolve("web")
+
+        environment("DOCUMENT_ROOT", webDir.toString())
+
+        doFirst {
+            sync {
+                from(web)
+                into(webDir)
+            }
+        }
+    }
 }
