@@ -2,7 +2,7 @@ import java.io.ByteArrayOutputStream
 
 plugins {
     java
-    kotlin("jvm") version "1.2.10"
+    kotlin("jvm") version "1.2.41"
     `maven-publish`
     `java-library`
     id("com.timgroup.webpack") version "1.0.12" apply false
