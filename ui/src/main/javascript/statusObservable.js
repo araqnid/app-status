@@ -1,11 +1,11 @@
 import Observable from "zen-observable";
-import ajaxObservable from "./ajaxObservable";
+import * as ajax from "./ajax";
 import {merge} from "zen-observable/extras";
 
-const accept = mimeType => ({ headers: { "Accept": mimeType, "X-Requested-With": "XMLHttpRequest" } });
-const statusAjax = ajaxObservable("/_api/info/status", accept("application/json"));
-const versionAjax = ajaxObservable("/_api/info/version", accept("text/plain"));
-const readinessAjax = ajaxObservable("/_api/info/readiness", accept("text/plain"));
+const accept = mimeType => ({ headers: { "Accept": mimeType } });
+const statusAjax = ajax.get("/_api/info/status", accept("application/json"));
+const versionAjax = ajax.get("/_api/info/version", accept("application/json"));
+const readinessAjax = ajax.get("/_api/info/readiness", accept("text/plain"));
 
 function asActions(observable, type) {
     return new Observable(observer => {
