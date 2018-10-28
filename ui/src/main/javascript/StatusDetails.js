@@ -9,30 +9,21 @@ export const StatusComponent = ({label, priority, text}) => (
 );
 
 export const StatusDetails = props => {
-    const headlineStatus = props.version && props.version.title ? props.version.title + " " + props.version.version + " - " + props.statusPage.status : props.statusPage.status;
+    const headlineStatus = props.version && props.version.title ? props.version.title + " " + props.version.version + " - " + props.status.status : props.status.status;
     const componentItems = [];
-    for ( const id of Object.keys(props.statusPage.components)) {
-        const comp = props.statusPage.components[id];
+    for ( const id of Object.keys(props.status.components)) {
+        const comp = props.status.components[id];
         componentItems.push(<StatusComponent key={id} id={id} label={comp.label} priority={comp.priority} text={comp.text} />);
     }
     return (
         <div>
             <div>
-                <ColouredHeadlineStatus priority={props.statusPage.status}>{headlineStatus}</ColouredHeadlineStatus>
+                <ColouredHeadlineStatus priority={props.status.status}>{headlineStatus}</ColouredHeadlineStatus>
                 <StatusComponentList>{componentItems}</StatusComponentList>
             </div>
             <Readiness readiness={props.readiness} />
         </div>
     );
-};
-
-export const LoadingStatusDetails = props => {
-    if (!props.statusPage || !props.version || !props.readiness) {
-        return <div>Loading...</div>;
-    }
-    return <div>
-        <StatusDetails {...props} />
-    </div>;
 };
 
 export const Readiness = ({readiness}) => (

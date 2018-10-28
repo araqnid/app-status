@@ -1,76 +1,132 @@
 import React from 'react';
-import statusObservable from "./statusObservable";
-import {LoadingStatusDetails} from "./StatusDetails";
+import {loadStatus} from "./statusObservable";
+import {StatusDetails} from "./StatusDetails";
 import {RefreshState} from "./RefreshState";
+import {autoRefresh} from "./refresh";
+
+const EMPTY_STATUS_PAGE = {version: null, readiness: null, status: null};
+
+function updateStatusPageMember(member, value) {
+    return state => {
+        const statusPage = state.values || EMPTY_STATUS_PAGE;
+        return {...state, values: {...statusPage, [member]: value}};
+    }
+}
+
+function updateRefreshPaused(paused) {
+    return state => {
+        const refresh = state.refresh;
+        return {...state, refresh: {...refresh, paused}};
+    }
+}
+
+function updateRefreshInterval(interval) {
+    return state => {
+        const refresh = state.refresh;
+        return {...state, refresh: {...refresh, interval}};
+    }
+}
 
 export default class Status extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { statusPage: null, refreshState: null, readiness: null, version: null, loadingError: null };
+        this.state = {
+            refresh: {paused: true, interval: 500},
+            values: EMPTY_STATUS_PAGE,
+            loadingError: null
+        };
         this._subscription = null;
-        this._controls = null;
     }
 
     render() {
-        if (!this.state.refreshState) {
-            return <div key="absent"/>;
+        if (this.state.loadingError !== null) {
+            return <div key="error">Failed to load status: {this.state.loadingError}</div>;
         }
 
-        if (this.state.loadingError !== null) {
-            return <div key="error">Failed to load status: { this.state.loadingError }</div>;
+        if (!this.state.values.version || !this.state.values.readiness || !this.state.values.status) {
+            return <div key="absent"/>;
         }
 
         return (
             <div key="present">
-                <LoadingStatusDetails
-                    version={this.state.version} statusPage={this.state.statusPage} readiness={this.state.readiness}
-                />
-                <RefreshState {...this.state.refreshState}
-                              store_pause={() => this._controls.pause()}
-                              store_unpause={() => this._controls.unpause()}
-                              store_kick={() => this._controls.kick()}
-                />
+                <StatusDetails {...this.state.values} />
+                <RefreshState {...this.state.refresh} controls={this._controls}/>
             </div>
         );
     }
 
     componentDidMount() {
-        this._subscription = statusObservable.subscribe(
-            ({ type, payload, error = false }) => {
+        this._subscribe()
+    }
+
+    componentWillUnmount() {
+        this._unsubscribe();
+    }
+
+    pause() {
+        this._unsubscribe();
+        this.setState(updateRefreshPaused(true));
+    }
+
+    unpause() {
+        this._unsubscribe();
+        this.setState(updateRefreshPaused(false), () => this._subscribe());
+    }
+
+    kick() {
+        this._unsubscribe();
+        this._subscribe();
+    }
+
+    updateRefreshInterval(newInterval) {
+        this._unsubscribe();
+        this.setState(updateRefreshInterval(newInterval), () => this._subscribe());
+    }
+
+    get _controls() {
+        return {
+            pause: this.pause.bind(this),
+            unpause: this.unpause.bind(this),
+            kick: this.kick.bind(this),
+            updateRefreshInterval: this.updateRefreshInterval.bind(this)
+        }
+    }
+
+    _subscribe() {
+        if (this._subscription) throw new Error("Subscription already present");
+        this._subscription = this._observable.subscribe(
+            ({type, payload, error = false}) => {
                 if (error) {
-                    this.setState({ status: null, version: null, readiness: null, loadingError: payload });
+                    this.setState({values: EMPTY_STATUS_PAGE, loadingError: payload});
                 }
                 else {
                     switch (type) {
-                        case "_controls":
-                            this._controls = payload;
-                            break;
-                        case "refreshState":
-                            this.setState({ refreshState: payload });
-                            break;
                         case "status":
-                            this.setState({ statusPage : payload, loadingError: null });
+                            this.setState(updateStatusPageMember('status', payload));
                             break;
                         case "version":
-                            this.setState({ version : payload, loadingError: null });
+                            this.setState(updateStatusPageMember('version', payload));
                             break;
                         case "readiness":
-                            this.setState({ readiness : payload, loadingError: null });
+                            this.setState(updateStatusPageMember('readiness', payload));
                             break;
                     }
                 }
-            },
-            error => {
-                console.error("status observable terminated with error", error);
-            },
-            () => {
-                console.error("status observable terminated")
             }
         );
     }
 
-    componentWillUnmount() {
-        if (this._subscription)
+    _unsubscribe() {
+        if (this._subscription) {
             this._subscription.unsubscribe();
+            this._subscription = null;
+        }
+    }
+
+    get _observable() {
+        const { paused, interval } = this.state.refresh;
+        if (paused)
+            return loadStatus;
+        return autoRefresh(interval)(loadStatus);
     }
 }

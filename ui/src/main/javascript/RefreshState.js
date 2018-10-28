@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export const RefreshState = ({ paused, interval, store_kick, store_pause, store_unpause}) => {
+export const RefreshState = ({ paused, interval, controls}) => {
     if (paused) {
-        return <Styled><button onClick={store_kick}>Refresh</button><button onClick={store_unpause}>Start auto-refresh</button></Styled>;
+        return <Styled><button onClick={controls.kick}>Refresh</button><button onClick={controls.unpause}>Start auto-refresh</button></Styled>;
     }
     else {
-        return <Styled>Auto-refresh interval: {interval} <button onClick={store_pause}>Stop auto-refresh</button></Styled>;
+        return <Styled>Auto-refresh interval: {interval} <button onClick={controls.pause}>Stop auto-refresh</button></Styled>;
     }
 };
 
