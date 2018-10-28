@@ -1,6 +1,7 @@
 import Observable from "zen-observable";
 import * as ajax from "./ajax";
 import {merge} from "zen-observable/extras";
+import {autoRefresh} from "./refresh";
 
 const accept = mimeType => ({ headers: { "Accept": mimeType } });
 const statusAjax = ajax.get("/_api/info/status", accept("application/json"));
@@ -35,76 +36,46 @@ class StatusSubscription {
     pause() {
         this._refreshState.paused = true;
         this._emitState();
-        this._cancelTimer();
+        this.unsubscribe();
     }
 
     unpause() {
         this._refreshState.paused = false;
         this._emitState();
-        if (this._refreshTimer == null && this._subscription == null)
-            this._startLoading();
+        this._subscribe();
     }
 
     kick() {
-        if (!this._subscription) {
-            this._cancelTimer();
-            this._startLoading();
-        }
-    }
-
-    updateRefreshInterval(newInterval) {
-        this._refreshState.interval = newInterval;
-        this._emitState();
-        if (this._refreshTimer != null) {
-            this._cancelTimer();
-            this._scheduleRefresh();
-        }
+        this.unsubscribe();
+        this._subscribe();
     }
 
     _begin() {
         this._observer.next({ type: '_controls', payload: this }); // hax
         this._emitState();
-        this._startLoading();
+        this._subscribe();
     }
 
     _emitState() {
         this._observer.next({ type: "refreshState", payload: this._refreshState });
     }
 
-    _startLoading() {
-        loadStatus.subscribe(
-            value => { this._observer.next(value); },
-            error => { /* unexpected */ },
-            () => {
-                this._subscription = null;
-                if (!this._refreshState.paused) {
-                    this._scheduleRefresh();
-                }
-            }
+    _subscribe() {
+        this._subscription = this._underlyingObservable.subscribe(
+            value => this._observer.next(value)
         );
     }
 
-    _timerTick() {
-        this._refreshTimer = null;
-        this._startLoading();
+    get _underlyingObservable() {
+        if (this._refreshState.paused)
+            return loadStatus;
+        return autoRefresh(this._refreshState.interval)(loadStatus);
     }
 
     unsubscribe() {
         if (this._subscription) {
             this._subscription.unsubscribe();
             this._subscription = null;
-        }
-        this._cancelTimer();
-    }
-
-    _scheduleRefresh() {
-        this._refreshTimer = window.setTimeout(() => this._timerTick(), this._refreshState.interval);
-    }
-
-    _cancelTimer() {
-        if (this._refreshTimer) {
-            window.clearTimeout(this._refreshTimer);
-            this._refreshTimer = null;
         }
     }
 }
