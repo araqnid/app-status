@@ -8,7 +8,7 @@ const production = process.env.NODE_ENV === "production";
 
 module.exports = {
     context: assetsDir,
-    entry: './main',
+    entry: './index',
     mode: production ? "production" : "development",
     output: {
         path: path.resolve(__dirname, 'build/site'),
@@ -28,17 +28,12 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: [['@babel/env', { modules: false }], '@babel/react'],
-                        plugins: ["@babel/plugin-proposal-object-rest-spread"]
+                        plugins: ["@babel/plugin-proposal-object-rest-spread",
+                            ["babel-plugin-styled-components", {
+                                displayName: !production
+                            }]]
                     }
                 }
-            },
-            {
-                test: /\.css$/,
-                use: [ 'style-loader', 'css-loader' ]
-            },
-            {
-                test: /\.(png|woff|woff2|eot|ttf|svg)$/,
-                loader: 'url-loader?limit=100000'
             }
         ]
     },

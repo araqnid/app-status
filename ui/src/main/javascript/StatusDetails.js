@@ -1,11 +1,12 @@
 import React from 'react';
+import styled from 'styled-components';
 
-export const StatusComponent = props => {
-    return <li className={ "status-component priority-" + props.priority.toLowerCase() }>
-        <span className="label">{props.priority === "INFO" ? props.label : props.label + " - " + props.priority}</span>
-        <span className="value">{props.text}</span>
-    </li>;
-};
+export const StatusComponent = ({label, priority, text}) => (
+    <ColouredListItem priority={priority}>
+        <StatusComponentLabel>{priority === "INFO" ? label : label + " - " + priority}</StatusComponentLabel>
+        <StatusComponentText>{text}</StatusComponentText>
+    </ColouredListItem>
+);
 
 export const StatusDetails = props => {
     const headlineStatus = props.version && props.version.title ? props.version.title + " " + props.version.version + " - " + props.statusPage.status : props.statusPage.status;
@@ -16,9 +17,9 @@ export const StatusDetails = props => {
     }
     return (
         <div>
-            <div className={ "status-page priority-" + props.statusPage.status.toLowerCase() }>
-                <h1>{headlineStatus}</h1>
-                <ul>{componentItems}</ul>
+            <div>
+                <ColouredHeadlineStatus priority={props.statusPage.status}>{headlineStatus}</ColouredHeadlineStatus>
+                <StatusComponentList>{componentItems}</StatusComponentList>
             </div>
             <Readiness readiness={props.readiness} />
         </div>
@@ -35,7 +36,52 @@ export const LoadingStatusDetails = props => {
 };
 
 export const Readiness = ({readiness}) => (
-    readiness !== null && readiness.toLowerCase() === "ready"
-        ? <div className="readiness readiness-ready">Application ready</div>
-        : <div className="readiness readiness-other">Application NOT ready</div>
+    <ColouredReadiness readiness={readiness}>{readiness !== null && readiness.toLowerCase() === "ready" ? "Application ready" : "Application NOT ready"}</ColouredReadiness>
 );
+
+const priorityColours = {
+    critical: { background: "#ce002c",   foreground: "white" },
+    warning:  { background: "#eccd10",   foreground: "black" },
+    ok:       { background: "#0da237",   foreground: "white" },
+    info:     { background: "white",     foreground: "black" },
+    unknown:  { background: "black",     foreground: "white" }
+};
+
+const readinessColours = {
+    ready:       priorityColours.ok,
+    "not_ready": priorityColours.warning,
+    unknown:     priorityColours.unknown
+};
+
+const ColouredListItem = styled.li`
+  background-color: ${({priority}) => (priorityColours[priority.toLowerCase()] || priorityColours.unknown).background};
+  color: ${({priority}) => (priorityColours[priority.toLowerCase()] || priorityColours.unknown).foreground};
+`;
+
+const ColouredHeadlineStatus = styled.h1`
+  background-color: ${({priority}) => (priorityColours[priority.toLowerCase()] || priorityColours.unknown).background};
+  color: ${({priority}) => (priorityColours[priority.toLowerCase()] || priorityColours.unknown).foreground};
+  padding: 8px;
+`;
+
+const ColouredReadiness = styled.div`
+  background-color: ${({readiness}) => (readinessColours[readiness.toLowerCase()] || readinessColours.unknown).background};
+  color: ${({readiness}) => (readinessColours[readiness.toLowerCase()] || readinessColours.unknown).foreground};
+  padding: 8px;
+`;
+
+const StatusComponentLabel = styled.div`
+  font-weight: bold;
+`;
+
+const StatusComponentText = styled.span`
+`;
+
+const StatusComponentList = styled.ul`
+padding: 0;
+
+> li {
+  list-style-type: none;
+  padding: 8px;
+}
+`;
