@@ -1,7 +1,7 @@
 App-Status
 ==========
 
-[ ![Build Status](https://travis-ci.org/araqnid/app-status.svg?branch=master)](https://travis-ci.org/araqnid/app-status) [ ![Download](https://api.bintray.com/packages/araqnid/maven/app-status/images/download.svg) ](https://bintray.com/araqnid/maven/app-status/_latestVersion) [ ![Kotlin](https://img.shields.io/badge/kotlin-1.2.41-blue.svg)](http://kotlinlang.org)
+[ ![Build Status](https://travis-ci.org/araqnid/app-status.svg?branch=master)](https://travis-ci.org/araqnid/app-status) [ ![Download](https://api.bintray.com/packages/araqnid/maven/app-status/images/download.svg) ](https://bintray.com/araqnid/maven/app-status/_latestVersion) [ ![Kotlin](https://img.shields.io/badge/kotlin-1.2.71-blue.svg)](http://kotlinlang.org)
 
 When you're running a webservice, you may need a way to monitor if it is currently working, or discovering
 problems with it. This library allows for the application to collect together various monitoring components,

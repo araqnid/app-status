@@ -2,11 +2,11 @@ import java.io.ByteArrayOutputStream
 
 plugins {
     java
-    kotlin("jvm") version "1.2.41"
+    kotlin("jvm") version "1.2.71"
     `maven-publish`
     `java-library`
     id("com.timgroup.webpack") version "1.0.37" apply false
-    id("com.jfrog.bintray") version "1.7.3"
+    id("com.jfrog.bintray") version "1.8.4"
 }
 
 val gitVersion by extra {
@@ -24,11 +24,11 @@ val gitVersion by extra {
 group = "org.araqnid"
 version = gitVersion
 
-val guavaVersion by extra("23.6-jre")
-val jettyVersion by extra("9.4.8.v20171121")
-val jacksonVersion by extra("2.9.3")
+val guavaVersion by extra("26.0-jre")
+val jettyVersion by extra("9.4.12.v20180830")
+val jacksonVersion by extra("2.9.6")
 val resteasyVersion by extra("3.1.4.Final")
-val guiceVersion by extra("4.1.0")
+val guiceVersion by extra("4.2.1")
 
 val web by configurations.creating
 
@@ -40,12 +40,12 @@ dependencies {
     api("com.google.inject:guice:$guiceVersion")
     api("com.fasterxml.jackson.core:jackson-annotations:2.8.0")
     implementation("com.google.guava:guava:$guavaVersion")
-    implementation(kotlin("stdlib-jdk8", "1.2.10"))
-    implementation(kotlin("reflect", "1.2.10"))
+    implementation(kotlin("stdlib-jdk8", "1.2.71"))
+    implementation(kotlin("reflect", "1.2.71"))
     testImplementation("junit:junit:4.12")
     testImplementation("com.natpryce:hamkrest:1.4.2.2")
     testImplementation("org.araqnid:hamkrest-json:1.0.3")
-    testImplementation(kotlin("test-junit", "1.2.10"))
+    testImplementation(kotlin("test-junit", "1.2.71"))
     web(project("ui", "web"))
 }
 
@@ -78,12 +78,12 @@ tasks {
 
 val sourcesJar by tasks.creating(Jar::class) {
     classifier = "sources"
-    from(java.sourceSets["main"].allSource)
+    from(sourceSets["main"].allSource)
 }
 
 publishing {
-    (publications) {
-        "mavenJava"(MavenPublication::class) {
+    publications {
+        register<MavenPublication>("mavenJava") {
             from(components["java"])
             artifact(sourcesJar)
         }
