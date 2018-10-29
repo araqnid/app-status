@@ -33,12 +33,12 @@ export function concat(...sources) {
     })
 }
 
-export function asActions(type) {
+export function asActions(type, errorType = `${type}.error`) {
     return underlying => {
         return new Observable(observer => {
             underlying.subscribe(
                 value => { observer.next({ type: type, payload: value }) },
-                error => { observer.next({ type: `${type}.error`, payload: error, error: true }); observer.complete() },
+                error => { observer.next({ type: errorType, payload: error, error: true }); observer.complete() },
                 () => { observer.complete() }
             );
         });

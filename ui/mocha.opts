@@ -1,0 +1,4 @@
+--require ./mocha-hook
+--require jsdom-global/register
+--require testSetup.js
+--require regenerator-runtime/runtime
