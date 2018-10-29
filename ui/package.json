@@ -17,6 +17,7 @@
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "axios-mock-adapter": "^1.15.0",
     "babel-loader": "^8.0.4",
     "babel-plugin-styled-components": "^1.8.0",
     "enzyme": "3.7.0",

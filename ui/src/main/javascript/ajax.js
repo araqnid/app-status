@@ -1,7 +1,7 @@
 import axios from "axios";
 import Observable from "zen-observable";
 
-const localAxios = axios.create({ headers: { "Accept": "application/json", "X-Requested-With": "XMLHttpRequest" }});
+export const localAxios = axios.create({ headers: { "Accept": "application/json", "X-Requested-With": "XMLHttpRequest" }});
 
 export function get(url, requestConfig = {}) {
     return new Observable(observer => {
