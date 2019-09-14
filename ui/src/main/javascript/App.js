@@ -1,180 +1,90 @@
-import React from 'react';
-import Observable from 'zen-observable';
-import {merge} from "zen-observable/extras";
-import {autoRefresh} from "./refresh";
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import Observable from "zen-observable";
 import {LoadingIndicator} from "./LoadingIndicator";
-import {asActions, concat} from "./observables";
 import Status from "./Status";
-import * as ajax from "./ajax";
+import StatusLoader from "./StatusLoader";
 
-const EMPTY_STATUS_PAGE = {version: null, readiness: null, status: null};
-
-function updateStatusPageMember(member, value) {
-    return state => {
-        const statusPage = state.values || EMPTY_STATUS_PAGE;
-        return {...state, loadingError: null, values: {...statusPage, [member]: value}};
-    }
-}
-
-function updateRefreshPaused(paused) {
-    return state => {
-        const refresh = state.refresh;
-        return {...state, refresh: {...refresh, paused}};
-    }
-}
-
-function updateRefreshInterval(interval) {
-    return state => {
-        const refresh = state.refresh;
-        return {...state, refresh: {...refresh, interval}};
-    }
-}
-
-function markLoading(loading) {
-    return state => {
-        return {...state, loading };
-    }
-}
-
-function setLoadingError(loadingError) {
-    return state => {
-        return {...state, loadingError, values: EMPTY_STATUS_PAGE };
-    }
-}
-
-const accept = mimeType => ({ headers: { "Accept": mimeType } });
-const statusAjax = ajax.get("/_api/info/status", accept("application/json"));
-const versionAjax = ajax.get("/_api/info/version", accept("application/json"));
-const readinessAjax = ajax.get("/_api/info/readiness", accept("text/plain"));
-
-const statusAsActions = asActions("status")(statusAjax);
-const versionAsActions = asActions("version")(versionAjax);
-const readinessAsActions = asActions("readiness")(readinessAjax);
-
-const loadStatus = merge(statusAsActions, versionAsActions, readinessAsActions);
-
-export default class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            refresh: {paused: true, interval: 500},
-            values: EMPTY_STATUS_PAGE,
-            loadingError: null,
-            loading: false
-        };
-        this._subscription = null;
-    }
-
-    render() {
-        const { loadingError, values, refresh, loading } = this.state;
-
-        return (
-            <div>
-                <LoadingIndicator loading={loading ? "true" : undefined} />
-                <Status loadingError={loadingError} values={values} refresh={refresh} controls={this._controls} />
-            </div>
-        );
-    }
-
-    componentDidMount() {
-        this._subscribe()
-    }
-
-    componentWillUnmount() {
-        this._unsubscribe();
-    }
-
-    pause() {
-        this._unsubscribe();
-        this.setState(markLoading(false));
-        this.setState(updateRefreshPaused(true));
-    }
-
-    unpause() {
-        this._unsubscribe();
-        this.setState(markLoading(false));
-        this.setState(updateRefreshPaused(false), () => this._subscribe());
-    }
-
-    kick() {
-        this._unsubscribe();
-        this.setState(markLoading(false), () => this._subscribe());
-    }
-
-    updateRefreshInterval(newInterval) {
-        this._unsubscribe();
-        this.setState(markLoading(false));
-        this.setState(updateRefreshInterval(newInterval), () => this._subscribe());
-    }
-
-    get _controls() {
-        return {
-            pause: this.pause.bind(this),
-            unpause: this.unpause.bind(this),
-            kick: this.kick.bind(this),
-            updateRefreshInterval: this.updateRefreshInterval.bind(this)
-        }
-    }
-
-    _subscribe() {
-        if (this._subscription) throw new Error("Subscription already present");
-        this.setState(markLoading(true), () => {
-            this._subscription = this._observable.subscribe(
-                ({type, payload, error = false}) => {
-                    if (error) {
-                        this.setState(setLoadingError(payload));
-                        this.setState(markLoading(false));
+const App = ({}) => {
+    const [paused, setPaused] = useState(false);
+    const [refreshInterval, setRefreshInterval] = useState(500);
+    const [status, setStatus] = useState(null);
+    const [version, setVersion] = useState(null);
+    const [readiness, setReadiness] = useState(null);
+    const [loadingError, setLoadingError] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const statusLoader = useRef(new StatusLoader(refreshInterval));
+    useEffect(() => {
+        const subscription = Observable.from(statusLoader.current).subscribe(
+            ({type, payload, error = false}) => {
+                if (error) {
+                    setLoadingError(payload);
+                    setLoading(false);
+                } else {
+                    switch (type) {
+                        case "status":
+                            setStatus(payload);
+                            break;
+                        case "version":
+                            setVersion(payload);
+                            break;
+                        case "readiness":
+                            setReadiness(payload);
+                            break;
+                        case "refresh-start":
+                            setLoading(true);
+                            break;
+                        case "refresh-complete":
+                            setLoading(false);
+                            break;
                     }
-                    else {
-                        switch (type) {
-                            case "status":
-                                this.setState(updateStatusPageMember('status', payload));
-                                break;
-                            case "version":
-                                this.setState(updateStatusPageMember('version', payload));
-                                break;
-                            case "readiness":
-                                this.setState(updateStatusPageMember('readiness', payload));
-                                break;
-                            case "refresh-start":
-                                this.setState(markLoading(true));
-                                break;
-                            case "refresh-complete":
-                                this.setState(markLoading(false));
-                                break;
-                        }
-                    }
-                },
-                error => {
-                    console.error("subscription terminated unexpectedly", error);
-                    this.setState(markLoading(false));
-                    this._subscription = null;
-                },
-                () => {
-                    this.setState(markLoading(false));
-                    this._subscription = null;
                 }
-            );
-        });
-    }
+            });
+        statusLoader.current.start(paused ? null : refreshInterval);
+        return () => {
+            subscription.unsubscribe();
+        };
+    }, []);
+    const controls = useMemo(() => {
+        return {
+            pause() {
+                statusLoader.current.stop();
+                setLoading(false);
+                setPaused(true);
+            },
 
-    _unsubscribe() {
-        if (this._subscription) {
-            this._subscription.unsubscribe();
-            this._subscription = null;
-        }
-    }
+            unpause() {
+                statusLoader.current.stop();
+                setLoading(false);
+                setPaused(false);
+                statusLoader.current.start(refreshInterval);
+            },
 
-    get _observable() {
-        const { paused, interval } = this.state.refresh;
-        if (paused)
-            return loadStatus;
-        return autoRefresh(interval)(
-            concat(
-                Observable.of({ type: "refresh-start", payload: null }),
-                loadStatus,
-                Observable.of({ type: "refresh-complete", payload: null })
-            )
-        );
-    }
-}
+            kick() {
+                statusLoader.current.stop();
+                setLoading(false);
+                statusLoader.current.start();
+            },
+
+            updateRefreshInterval(newInterval) {
+                setRefreshInterval(newInterval);
+                if (!paused) {
+                    statusLoader.current.stop();
+                    setLoading(false);
+                    statusLoader.current.start(newInterval);
+                }
+            }
+        };
+    }, []);
+
+    return (
+        <div>
+            <LoadingIndicator loading={loading ? "true" : undefined}/>
+            <Status loadingError={loadingError}
+                    values={{status, version, readiness}}
+                    refresh={{paused, interval: refreshInterval}}
+                    controls={controls}/>
+        </div>
+    );
+};
+
+export default App;

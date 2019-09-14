@@ -2,22 +2,25 @@ import React from 'react';
 import {StatusDetails} from "./StatusDetails";
 import {RefreshState} from "./RefreshState";
 
-const Status = ({loadingError, values, refresh, controls}) => {
+const Status = ({loadingError, values: { version, status, readiness}, refresh: { paused, interval }, controls}) => {
     if (loadingError !== null) {
-        return <div key="error">
-            Failed to load status: {loadingError.toString()}
-        </div>;
+        return (
+            <div key="error">
+                Failed to load status: {loadingError.toString()}
+            </div>
+        );
     }
 
-    if (!values.version || !values.readiness || !values.status) {
-        return <div key="absent">
-        </div>;
+    if (!version || !readiness || !status) {
+        return (
+            <div key="absent"/>
+        );
     }
 
     return (
         <div key="present">
-            <StatusDetails {...values} />
-            <RefreshState {...refresh} controls={controls} />
+            <StatusDetails version={version} status={status} readiness={readiness} />
+            <RefreshState paused={paused} interval={interval} controls={controls} />
         </div>
     );
 };

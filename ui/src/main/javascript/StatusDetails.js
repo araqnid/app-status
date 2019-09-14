@@ -8,20 +8,20 @@ export const StatusComponent = ({label, priority, text}) => (
     </ColouredListItem>
 );
 
-export const StatusDetails = props => {
-    const headlineStatus = props.version && props.version.title ? props.version.title + " " + props.version.version + " - " + props.status.status : props.status.status;
+export const StatusDetails = ({ version, status, readiness }) => {
+    const headlineStatus = version && version.title ? version.title + " " + version.version + " - " + status.status : status.status;
     const componentItems = [];
-    for ( const id of Object.keys(props.status.components)) {
-        const comp = props.status.components[id];
+    for ( const id of Object.keys(status.components)) {
+        const comp = status.components[id];
         componentItems.push(<StatusComponent key={id} id={id} label={comp.label} priority={comp.priority} text={comp.text} />);
     }
     return (
         <div>
             <div>
-                <ColouredHeadlineStatus priority={props.status.status}>{headlineStatus}</ColouredHeadlineStatus>
+                <ColouredHeadlineStatus priority={status.status}>{headlineStatus}</ColouredHeadlineStatus>
                 <StatusComponentList>{componentItems}</StatusComponentList>
             </div>
-            <Readiness readiness={props.readiness} />
+            <Readiness readiness={readiness} />
         </div>
     );
 };

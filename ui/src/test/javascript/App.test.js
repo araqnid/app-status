@@ -1,4 +1,5 @@
 import React from "react";
+import {act} from "react-dom/test-utils";
 import {mount} from "enzyme";
 import MockAdapter from "axios-mock-adapter";
 import App from "../../main/javascript/App";
@@ -37,11 +38,11 @@ it("loads status, version and readiness on mount", async () => {
     });
     component = mount(<App/>);
 
-    expect(component.text()).toEqual("Loading");
-
-    while (mockAxios.history.get.length < 3) {
-        await timeoutTick();
-    }
+    await act(async () => {
+        while (mockAxios.history.get.length < 3) {
+            await timeoutTick();
+        }
+    });
     component.update();
 
     expect(new Set(mockAxios.history.get.map(it => it.url))).toEqual(new Set(["/_api/info/status", "/_api/info/readiness", "/_api/info/version"]));
@@ -54,9 +55,11 @@ it("loads status, version and readiness on mount", async () => {
 it("shows an error if status not available", async () => {
     component = mount(<App/>);
 
-    while (mockAxios.history.get.length < 3) {
-        await timeoutTick();
-    }
+    await act(async () => {
+        while (mockAxios.history.get.length < 3) {
+            await timeoutTick();
+        }
+    });
     component.update();
 
     expect(new Set(mockAxios.history.get.map(it => it.url))).toEqual(new Set(["/_api/info/status", "/_api/info/readiness", "/_api/info/version"]));
