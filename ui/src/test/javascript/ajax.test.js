@@ -1,4 +1,3 @@
-import assert from 'assert';
 import MockAdapter from "axios-mock-adapter";
 import * as ajax from "../../main/javascript/ajax";
 import {localAxios} from "../../main/javascript/ajax";
@@ -23,7 +22,7 @@ describe("get", () => {
         mock.onGet("/test").reply(200, { data: "xyzzy" });
         const actions = [];
         await asActions("fetch")(ajax.get("/test")).forEach(action => actions.push(action));
-        assert.deepStrictEqual(actions, [
+        expect(actions).toEqual([
             { type: "fetch", payload: { data: "xyzzy" } }
         ]);
     });
@@ -34,7 +33,7 @@ describe("get", () => {
         await asActions("fetch")(ajax.get("/test"))
             .map(action => action.error ? ({ type: action.type, error: true, payload: action.payload.response.status }) : action)
             .forEach(action => actions.push(action));
-        assert.deepStrictEqual(actions, [
+        expect(actions).toEqual([
             { type: "fetch.error", payload: 500, error: true }
         ]);
     });

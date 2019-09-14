@@ -1,5 +1,4 @@
 import Observable from "zen-observable";
-import assert from 'assert';
 import {autoRefresh, timer} from "../../main/javascript/refresh";
 
 let subscription = null;
@@ -24,18 +23,18 @@ describe("timer", () => {
 
         await delay(testInterval / 2);
 
-        assert.deepStrictEqual(values, [0]);
+        expect(values).toEqual([0]);
 
         await delay(testInterval * 1.2);
 
-        assert.deepStrictEqual(values, [0, 1]);
+        expect(values.length).toBeGreaterThan(1);
+        expect(values[1]).toBe(1);
     });
 });
 
 describe("autoRefresh", () => {
     it("folds in underlying observable on each tick", async () => {
         const values = [];
-        let counter = 0;
 
         const testInterval = 10;
 
@@ -45,11 +44,13 @@ describe("autoRefresh", () => {
 
         await delay(testInterval / 2);
 
-        assert.deepStrictEqual(values, ["red", "blue"]);
+        expect(values).toEqual(["red", "blue"]);
 
         await delay(testInterval * 1.2);
 
-        assert.deepStrictEqual(values, ["red", "blue", "red", "blue"]);
+        expect(values.length).toBeGreaterThan(2);
+        expect(values[2]).toBe("red");
+        expect(values[3]).toBe("blue");
     });
 });
 

@@ -1,5 +1,4 @@
 import Observable from "zen-observable";
-import assert from 'assert';
 import {asActions, concat} from "../../main/javascript/observables";
 
 describe("concat", () => {
@@ -9,7 +8,7 @@ describe("concat", () => {
         await concat(Observable.of(1, 2, 3, 4), Observable.of(5, 6, 7, 8))
             .forEach(x => list.push(x));
 
-        assert.deepStrictEqual(list, [1, 2, 3, 4, 5, 6, 7, 8]);
+        expect(list).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
     });
 
     it("can be used multiple times to produce the same results", async () => {
@@ -21,8 +20,8 @@ describe("concat", () => {
         await concat(Observable.of(1, 2, 3, 4), Observable.of(5, 6, 7, 8))
             .forEach(x => list2.push(x));
 
-        assert.deepStrictEqual(list1, [1, 2, 3, 4, 5, 6, 7, 8]);
-        assert.deepStrictEqual(list2, [1, 2, 3, 4, 5, 6, 7, 8]);
+        expect(list1).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+        expect(list2).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
     });
 });
 
@@ -33,7 +32,7 @@ describe("asActions", () => {
         await asActions("colour")(Observable.of("red", "blue"))
             .forEach(x => list.push(x));
 
-        assert.deepStrictEqual(list, [
+        expect(list).toEqual([
             { type: "colour", payload: "red" },
             { type: "colour", payload: "blue" }
         ]);
@@ -52,7 +51,7 @@ describe("asActions", () => {
         await asActions("test", "test_custom_error")(produceError)
             .forEach(x => list.push(x));
 
-        assert.deepStrictEqual(list, [
+        expect(list).toEqual([
             { type: "test", payload: "value" },
             { type: "test.error", payload: new Error("This is an error"), error: true },
             { type: "test", payload: "value" },
