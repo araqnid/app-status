@@ -40,7 +40,7 @@ dependencies {
 }
 
 tasks {
-    withType<JavaCompile> {
+    withType<JavaCompile>().configureEach {
         sourceCompatibility = "1.8"
         targetCompatibility = "1.8"
         options.encoding = "UTF-8"
@@ -49,13 +49,13 @@ tasks {
         options.isDeprecation = true
     }
 
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
         kotlinOptions {
             jvmTarget = "1.8"
         }
     }
 
-    "jar"(Jar::class) {
+    named("jar", Jar::class) {
         manifest {
             attributes["Implementation-Title"] = project.description ?: project.name
             attributes["Implementation-Version"] = project.version
@@ -64,18 +64,18 @@ tasks {
             from(web)
         }
     }
-}
 
-val sourcesJar by tasks.creating(Jar::class) {
-    classifier = "sources"
-    from(sourceSets["main"].allSource)
+    register<Jar>("sourcesJar") {
+        archiveClassifier.set("sources")
+        from(sourceSets["main"].allSource)
+    }
 }
 
 publishing {
     publications {
         register<MavenPublication>("mavenJava") {
             from(components["java"])
-            artifact(sourcesJar)
+            artifact("sourcesJar")
         }
     }
 }

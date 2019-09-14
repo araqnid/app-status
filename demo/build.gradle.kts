@@ -48,7 +48,7 @@ dependencies {
 }
 
 tasks {
-    "run"(JavaExec::class) {
+    named("run", JavaExec::class) {
         dependsOn(web)
         val webDir = buildDir.resolve("web")
 
