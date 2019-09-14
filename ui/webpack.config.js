@@ -42,7 +42,8 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: "Status"
+            title: "Status",
+            template: "../index.html.ejs"
         })
     ]
 };
