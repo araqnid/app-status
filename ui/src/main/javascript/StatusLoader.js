@@ -4,18 +4,17 @@ import {asActions, concat} from "./observables";
 import {merge} from "zen-observable/lib/extras";
 import {autoRefresh} from "./refresh";
 
-const accept = mimeType => ({headers: {"Accept": mimeType}});
-const statusAjax = ajax.get("/_api/info/status", accept("application/json"));
-const versionAjax = ajax.get("/_api/info/version", accept("application/json"));
-const readinessAjax = ajax.get("/_api/info/readiness", accept("text/plain"));
-
-const statusAsActions = asActions("status")(statusAjax);
-const versionAsActions = asActions("version")(versionAjax);
-const readinessAsActions = asActions("readiness")(readinessAjax);
+function accept(mimeType) {
+    return {headers: {"Accept": mimeType}};
+}
 
 const loadStatus = concat(
     Observable.of({type: "refresh-start"}),
-    merge(statusAsActions, versionAsActions, readinessAsActions),
+    merge(
+        asActions("status")(ajax.get("/_api/info/status", accept("application/json"))),
+        asActions("version")(ajax.get("/_api/info/version", accept("application/json"))),
+        asActions("readiness")(ajax.get("/_api/info/readiness", accept("text/plain")))
+    ),
     Observable.of({type: "refresh-complete"})
 );
 
@@ -29,8 +28,8 @@ function applyAutoRefresh(refreshInterval) {
 }
 
 class StatusLoader {
-    constructor(refreshInterval) {
-        this.subscribers = new Set();
+    constructor() {
+        this._subscribers = new Set();
         this._subscription = null;
     }
 
@@ -44,7 +43,7 @@ class StatusLoader {
 
     _emit(type, payload, error) {
         const action = {type, payload, error};
-        for (const subscriber of this.subscribers) {
+        for (const subscriber of this._subscribers) {
             subscriber.next(action);
         }
     }
@@ -67,10 +66,10 @@ class StatusLoader {
 
     [Symbol.observable]() {
         return new Observable(observer => {
-            this.subscribers.add(observer);
+            this._subscribers.add(observer);
             return () => {
-                this.subscribers.delete(observer);
-                if (this.subscribers.size === 0) {
+                this._subscribers.delete(observer);
+                if (this._subscribers.size === 0) {
                     this._unsubscribe();
                 }
             };
