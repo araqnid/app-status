@@ -7,11 +7,11 @@ import {asActions} from "../../main/javascript/observables";
 describe("ajax observables", () => {
     let mock = null;
 
-    before(() => {
+    beforeAll(() => {
         mock = new MockAdapter(localAxios);
     });
 
-    after(() => {
+    afterAll(() => {
         mock.restore();
     });
 

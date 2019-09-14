@@ -1,5 +1,3 @@
-import java.io.ByteArrayOutputStream
-
 plugins {
     application
     `java-library`
@@ -10,10 +8,7 @@ application {
     mainClassName = "org.araqnid.appstatus.demo.Main"
 }
 
-val gitVersion: String by rootProject.extra
-
 group = "org.araqnid"
-version = gitVersion
 
 val jettyVersion: String by rootProject.extra
 val jacksonVersion: String by rootProject.extra

@@ -70,7 +70,7 @@ export default class App extends React.Component {
 
         return (
             <div>
-                <LoadingIndicator loading={loading} />
+                <LoadingIndicator loading={loading ? "true" : undefined} />
                 <Status loadingError={loadingError} values={values} refresh={refresh} controls={this._controls} />
             </div>
         );

@@ -1,28 +1,18 @@
-import java.io.ByteArrayOutputStream
-
 plugins {
     java
-    kotlin("jvm") version "1.2.71"
+    kotlin("jvm") version "1.3.50"
     `maven-publish`
     `java-library`
-    id("com.timgroup.webpack") version "1.0.37" apply false
+    id("com.timgroup.webpack") version "1.0.50" apply false
     id("com.jfrog.bintray") version "1.8.4"
 }
 
-val gitVersion by extra {
-    val capture = ByteArrayOutputStream()
-    project.exec {
-        commandLine("git", "describe", "--tags")
-        standardOutput = capture
-    }
-    String(capture.toByteArray())
-            .trim()
-            .removePrefix("v")
-            .replace('-', '.')
-}
-
 group = "org.araqnid"
-version = gitVersion
+
+allprojects {
+    if (rootProject.hasProperty("version"))
+        version = rootProject.property("version").toString()
+}
 
 val guavaVersion by extra("26.0-jre")
 val jettyVersion by extra("9.4.12.v20180830")
@@ -100,8 +90,8 @@ bintray {
     pkg.setLicenses("Apache-2.0")
     pkg.vcsUrl = "https://github.com/araqnid/app-status"
     pkg.desc = "Expose health check results and some metadata on a single app page"
-    pkg.version.name = gitVersion
-    if (!gitVersion.contains(".g")) {
-        pkg.version.vcsTag = "v$gitVersion"
+    if (version != Project.DEFAULT_VERSION) {
+        pkg.version.name = version.toString()
+        pkg.version.vcsTag = "v$version"
     }
 }

@@ -5,7 +5,7 @@ import {RefreshState} from "./RefreshState";
 const Status = ({loadingError, values, refresh, controls}) => {
     if (loadingError !== null) {
         return <div key="error">
-            Failed to load status: {loadingError}
+            Failed to load status: {loadingError.toString()}
         </div>;
     }
 
