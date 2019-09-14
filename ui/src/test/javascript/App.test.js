@@ -1,5 +1,4 @@
 import React from "react";
-import {fakeServer} from "nise";
 import {mount} from "enzyme";
 import MockAdapter from "axios-mock-adapter";
 import App from "../../main/javascript/App";
@@ -8,11 +7,9 @@ import {Readiness} from "../../main/javascript/StatusDetails";
 import Status from "../../main/javascript/Status";
 
 let component = null;
-let server = null;
 let mockAxios = null;
 
-beforeEach(() => {
-    server = fakeServer.create();
+beforeAll(() => {
     mockAxios = new MockAdapter(localAxios);
 });
 
@@ -20,7 +17,10 @@ afterEach(() => {
     if (component) {
         component.unmount();
     }
-    fakeServer.restore();
+    mockAxios.reset();
+});
+
+afterAll(() => {
     mockAxios.restore();
 });
 
