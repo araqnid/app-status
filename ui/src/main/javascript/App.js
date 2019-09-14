@@ -78,11 +78,11 @@ const App = ({}) => {
 
     return (
         <div>
-            <LoadingIndicator loading={loading ? "true" : undefined}/>
             <Status loadingError={loadingError}
                     values={{status, version, readiness}}
                     refresh={{paused, interval: refreshInterval}}
                     controls={controls}/>
+            <LoadingIndicator loading={loading ? "true" : undefined}/>
         </div>
     );
 };

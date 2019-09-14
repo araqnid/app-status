@@ -1,15 +1,28 @@
-import React from "react";
-import styled from "styled-components";
+import React, {useEffect, useState} from "react";
 
-const Styled = styled.div`
-float: right;
-position: absolute;
-right: 4px;
-top: 4px;
-background-color: white;
-display: ${({loading}) => loading ? "block" : "none"};
-`;
-
-export const LoadingIndicator = ({ loading }) => (
-    <Styled loading={loading}>{ loading ? "Loading" : "Quiet" }</Styled>
-);
+export const LoadingIndicator = ({ loading, delayTime = 100 }) => {
+    const [throbberVisible, setThrobberVisible] = useState(false);
+    useEffect(() => {
+        let timer = null;
+        if (loading) {
+            timer = setTimeout(() => {
+                setThrobberVisible(true);
+            }, delayTime);
+        }
+        else {
+            setThrobberVisible(false);
+        }
+        return () => {
+            if (timer) {
+                clearTimeout(timer);
+            }
+            setThrobberVisible(false);
+        };
+    }, [loading]);
+    if (throbberVisible) {
+        return <div className="spinner-border" role="status"><span className="sr-only">Loading</span></div>;
+    }
+    else {
+        return null;
+    }
+};
