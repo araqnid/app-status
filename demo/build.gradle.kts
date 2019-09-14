@@ -30,8 +30,8 @@ configurations {
 
 dependencies {
     implementation(rootProject)
-    implementation(kotlin("stdlib-jdk8", "1.2.10"))
-    implementation(kotlin("reflect", "1.2.10"))
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
     implementation("org.slf4j:slf4j-api:1.7.25")
     implementation("org.eclipse.jetty:jetty-server:$jettyVersion")
     implementation("org.eclipse.jetty:jetty-servlet:$jettyVersion")

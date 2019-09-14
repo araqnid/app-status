@@ -30,12 +30,12 @@ dependencies {
     api("com.google.inject:guice:$guiceVersion")
     api("com.fasterxml.jackson.core:jackson-annotations:2.8.0")
     implementation("com.google.guava:guava:$guavaVersion")
-    implementation(kotlin("stdlib-jdk8", "1.2.71"))
-    implementation(kotlin("reflect", "1.2.71"))
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
     testImplementation("junit:junit:4.12")
-    testImplementation("com.natpryce:hamkrest:1.4.2.2")
-    testImplementation("org.araqnid:hamkrest-json:1.0.3")
-    testImplementation(kotlin("test-junit", "1.2.71"))
+    testImplementation("com.natpryce:hamkrest:1.7.0.0")
+    testImplementation("org.araqnid:hamkrest-json:1.1.0")
+    testImplementation(kotlin("test-junit"))
     web(project("ui", "web"))
 }
 
