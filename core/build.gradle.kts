@@ -14,7 +14,6 @@ repositories {
 dependencies {
     api("com.fasterxml.jackson.core:jackson-annotations:${LibraryVersions.jackson}")
     api(kotlin("stdlib-jdk8"))
-    api(kotlin("reflect"))
     implementation("com.google.guava:guava:${LibraryVersions.guava}")
     testImplementation("junit:junit:4.13")
     testImplementation("com.natpryce:hamkrest:${LibraryVersions.hamkrest}")

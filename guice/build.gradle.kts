@@ -12,6 +12,7 @@ repositories {
 dependencies {
     api(project(":core"))
     api("com.google.inject:guice:${LibraryVersions.guice}")
+    implementation(kotlin("reflect"))
     implementation("com.google.guava:guava:${LibraryVersions.guava}")
     testImplementation("junit:junit:4.13")
     testImplementation("com.natpryce:hamkrest:${LibraryVersions.hamkrest}")
