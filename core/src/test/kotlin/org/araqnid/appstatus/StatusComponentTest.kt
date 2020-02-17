@@ -2,6 +2,7 @@ package org.araqnid.appstatus
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
+import com.natpryce.hamkrest.sameInstance
 import org.junit.Test
 
 class StatusComponentTest {
@@ -24,5 +25,20 @@ class StatusComponentTest {
     fun `can arbitrarily transform produced reports`() {
         assertThat(component.mapReport { StatusReport(StatusReport.Priority.INFO, "suppressed: $it") }.report(),
                 equalTo(StatusReport(StatusReport.Priority.INFO, "suppressed: WARNING Example")))
+    }
+
+    @Test
+    fun `can build with report-supplier convenience methods`() {
+        assertThat(StatusComponent.from("a", "b", report).report(), sameInstance(report))
+        assertThat(StatusComponent.from("a", "b", java.util.function.Supplier { report }).report(), sameInstance(report))
+        assertThat(StatusComponent.from("a", "b") { report }.report(), sameInstance(report))
+    }
+
+    @Test
+    fun `can build with string-supplier convenience methods`() {
+        val expected = StatusReport(StatusReport.Priority.INFO, "test")
+        assertThat(StatusComponent.info("a", "b", "test").report(), equalTo(expected))
+        assertThat(StatusComponent.info("a", "b", java.util.function.Supplier { "test" }).report(), equalTo(expected))
+        assertThat(StatusComponent.info("a", "b") { "test" }.report(), equalTo(expected))
     }
 }

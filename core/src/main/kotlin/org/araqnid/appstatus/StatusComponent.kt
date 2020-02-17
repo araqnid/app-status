@@ -1,7 +1,5 @@
 package org.araqnid.appstatus
 
-import java.util.function.Supplier
-
 class StatusComponent(val id: String, val label: String, private val supplier: () -> StatusReport) : ReportConfigurable<StatusComponent> {
     fun report(): StatusReport = supplier()
 
@@ -15,12 +13,12 @@ class StatusComponent(val id: String, val label: String, private val supplier: (
 
     companion object {
         @JvmStatic fun info(id: String, label: String, content: String) = info(id, label) { content }
-        @JvmStatic fun info(id: String, label: String, supplier: Supplier<out String>) = info(id, label, supplier::get)
+        @JvmStatic fun info(id: String, label: String, supplier: java.util.function.Supplier<String>) = info(id, label, supplier::get)
         @JvmStatic fun info(id: String, label: String, supplier: () -> String) =
                 StatusComponent(id, label) { StatusReport( StatusReport.Priority.INFO, supplier()) }
 
         @JvmStatic fun from(id: String, label: String, content: StatusReport) = StatusComponent(id, label) { content }
-        @JvmStatic fun from(id: String, label: String, supplier: Supplier<out StatusReport>) = StatusComponent(id, label, supplier::get)
+        @JvmStatic fun from(id: String, label: String, supplier: java.util.function.Supplier<StatusReport>) = StatusComponent(id, label, supplier::get)
         @JvmStatic fun from(id: String, label: String, supplier: () -> StatusReport) = StatusComponent(id, label, supplier)
     }
 }
