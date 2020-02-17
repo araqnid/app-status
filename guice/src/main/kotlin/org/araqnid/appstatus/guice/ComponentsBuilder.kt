@@ -1,9 +1,12 @@
-package org.araqnid.appstatus
+package org.araqnid.appstatus.guice
 
 import com.google.common.collect.ImmutableList
 import com.google.inject.BindingAnnotation
 import com.google.inject.Injector
 import com.google.inject.Key
+import org.araqnid.appstatus.OnStatusPage
+import org.araqnid.appstatus.StatusComponent
+import org.araqnid.appstatus.StatusReport
 import java.lang.invoke.MethodHandles
 import java.lang.reflect.Method
 import javax.inject.Inject
@@ -34,8 +37,16 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
         val method = property.getter.javaMethod ?: throw IllegalStateException("No getter for $property")
         val providers = providersForMethod(method)
         return when (property.returnType.javaType) {
-            StatusReport::class.java -> StatusComponent.from(id, label, wrapInvocation(StatusReport::class.java, method, source, providers))
-            String::class.java -> StatusComponent.info(id, label, wrapInvocation(String::class.java, method, source, providers))
+            StatusReport::class.java -> StatusComponent.from(
+                    id,
+                    label,
+                    wrapInvocation(StatusReport::class.java,
+                            method,
+                            source,
+                            providers))
+            String::class.java -> StatusComponent.info(id,
+                    label,
+                    wrapInvocation(String::class.java, method, source, providers))
             else -> throw IllegalStateException("Invalid type from @OnStatusPage property $property: ${property.returnType.javaType}")
         }
     }
@@ -48,8 +59,16 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
         val method = function.javaMethod ?: throw IllegalStateException("No method for $function")
         val providers = providersForMethod(method)
         return when (function.returnType.javaType) {
-            StatusReport::class.java -> StatusComponent.from(id, label, wrapInvocation(StatusReport::class.java, method, source, providers))
-            String::class.java -> StatusComponent.info(id, label, wrapInvocation(String::class.java, method, source, providers))
+            StatusReport::class.java -> StatusComponent.from(
+                    id,
+                    label,
+                    wrapInvocation(StatusReport::class.java,
+                            method,
+                            source,
+                            providers))
+            String::class.java -> StatusComponent.info(id,
+                    label,
+                    wrapInvocation(String::class.java, method, source, providers))
             else -> throw IllegalStateException("Invalid return type from @OnStatusPage function $function: ${function.returnType.javaType}")
         }
     }

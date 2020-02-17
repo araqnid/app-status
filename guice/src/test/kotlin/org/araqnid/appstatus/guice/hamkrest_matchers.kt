@@ -1,4 +1,4 @@
-package org.araqnid.appstatus
+package org.araqnid.appstatus.guice
 
 import com.natpryce.hamkrest.MatchResult
 import com.natpryce.hamkrest.Matcher

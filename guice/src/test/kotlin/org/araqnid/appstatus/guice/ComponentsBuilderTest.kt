@@ -1,4 +1,4 @@
-package org.araqnid.appstatus
+package org.araqnid.appstatus.guice
 
 import com.google.inject.AbstractModule
 import com.google.inject.Binder
@@ -11,6 +11,9 @@ import com.natpryce.hamkrest.and
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.has
+import org.araqnid.appstatus.OnStatusPage
+import org.araqnid.appstatus.StatusComponent
+import org.araqnid.appstatus.StatusReport
 import org.junit.Test
 import javax.inject.Named
 import javax.inject.Qualifier
@@ -25,8 +28,10 @@ class ComponentsBuilderTest {
         })
         assertThat(statusComponents, containsOnly(
                 has(StatusComponent::id, equalTo("fixedString"))
-                           and has(StatusComponent::label, equalTo("fixedString"))
-                           and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "test text")))
+                        and has(StatusComponent::label, equalTo("fixedString"))
+                        and has(StatusComponent::report, equalTo(
+                        StatusReport(StatusReport.Priority.INFO,
+                                "test text")))
         ))
     }
 
@@ -35,12 +40,15 @@ class ComponentsBuilderTest {
         val componentsBuilder = ComponentsBuilder(injector)
         val statusComponents = componentsBuilder.buildStatusComponents(object {
             @OnStatusPage
-            val fixedReport = StatusReport(StatusReport.Priority.OK, "test report")
+            val fixedReport = StatusReport(StatusReport.Priority.OK,
+                    "test report")
         })
         assertThat(statusComponents, containsOnly(
                 has(StatusComponent::id, equalTo("fixedReport"))
                         and has(StatusComponent::label, equalTo("fixedReport"))
-                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.OK, "test report")))
+                        and has(StatusComponent::report, equalTo(
+                        StatusReport(StatusReport.Priority.OK,
+                                "test report")))
         ))
     }
 
@@ -55,7 +63,9 @@ class ComponentsBuilderTest {
         assertThat(statusComponents, containsOnly(
                 has(StatusComponent::id, equalTo("fixedString"))
                         and has(StatusComponent::label, equalTo("fixedString"))
-                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "test text")))
+                        and has(StatusComponent::report, equalTo(
+                        StatusReport(StatusReport.Priority.INFO,
+                                "test text")))
         ))
     }
 
@@ -65,12 +75,15 @@ class ComponentsBuilderTest {
         val statusComponents = componentsBuilder.buildStatusComponents(object {
             @OnStatusPage
             val fixedReport
-                get() = StatusReport(StatusReport.Priority.OK, "test report")
+                get() = StatusReport(StatusReport.Priority.OK,
+                        "test report")
         })
         assertThat(statusComponents, containsOnly(
                 has(StatusComponent::id, equalTo("fixedReport"))
                         and has(StatusComponent::label, equalTo("fixedReport"))
-                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.OK, "test report")))
+                        and has(StatusComponent::report, equalTo(
+                        StatusReport(StatusReport.Priority.OK,
+                                "test report")))
         ))
     }
 
@@ -84,7 +97,9 @@ class ComponentsBuilderTest {
         assertThat(statusComponents, containsOnly(
                 has(StatusComponent::id, equalTo("fixedString"))
                         and has(StatusComponent::label, equalTo("fixedString"))
-                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "test text")))
+                        and has(StatusComponent::report, equalTo(
+                        StatusReport(StatusReport.Priority.INFO,
+                                "test text")))
         ))
     }
 
@@ -93,12 +108,15 @@ class ComponentsBuilderTest {
         val componentsBuilder = ComponentsBuilder(injector)
         val statusComponents = componentsBuilder.buildStatusComponents(object {
             @OnStatusPage
-            fun fixedReport() = StatusReport(StatusReport.Priority.OK, "test report")
+            fun fixedReport() = StatusReport(StatusReport.Priority.OK,
+                    "test report")
         })
         assertThat(statusComponents, containsOnly(
                 has(StatusComponent::id, equalTo("fixedReport"))
                         and has(StatusComponent::label, equalTo("fixedReport"))
-                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.OK, "test report")))
+                        and has(StatusComponent::report, equalTo(
+                        StatusReport(StatusReport.Priority.OK,
+                                "test report")))
         ))
     }
 
@@ -118,7 +136,9 @@ class ComponentsBuilderTest {
         assertThat(statusComponents, containsOnly(
                 has(StatusComponent::id, equalTo("parameterisedString"))
                         and has(StatusComponent::label, equalTo("parameterisedString"))
-                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "text: $value")))
+                        and has(StatusComponent::report, equalTo(
+                        StatusReport(StatusReport.Priority.INFO,
+                                "text: $value")))
         ))
     }
 
@@ -126,7 +146,8 @@ class ComponentsBuilderTest {
         val value = "xyzzy"
         val injector = Guice.createInjector(Module(Binder::requireExplicitBindings), object : AbstractModule() {
             override fun configure() {
-                bind(Key.get(object : TypeLiteral<ParameterisedTest<@JvmSuppressWildcards String>>(){})).toInstance(ParameterisedTest(value))
+                bind(Key.get(object : TypeLiteral<ParameterisedTest<@JvmSuppressWildcards String>>(){})).toInstance(
+                        ParameterisedTest(value))
             }
         })
         val componentsBuilder = ComponentsBuilder(injector)
@@ -137,7 +158,9 @@ class ComponentsBuilderTest {
         assertThat(statusComponents, containsOnly(
                 has(StatusComponent::id, equalTo("parameterisedString"))
                         and has(StatusComponent::label, equalTo("parameterisedString"))
-                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "text: $value")))
+                        and has(StatusComponent::report, equalTo(
+                        StatusReport(StatusReport.Priority.INFO,
+                                "text: $value")))
         ))
     }
 
@@ -160,7 +183,9 @@ class ComponentsBuilderTest {
         assertThat(statusComponents, containsOnly(
                 has(StatusComponent::id, equalTo("parameterisedString"))
                         and has(StatusComponent::label, equalTo("parameterisedString"))
-                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "text: $alphaValue - $betaValue")))
+                        and has(StatusComponent::report, equalTo(
+                        StatusReport(StatusReport.Priority.INFO,
+                                "text: $alphaValue - $betaValue")))
         ))
     }
 
@@ -180,7 +205,9 @@ class ComponentsBuilderTest {
         assertThat(statusComponents, containsOnly(
                 has(StatusComponent::id, equalTo("parameterisedString"))
                         and has(StatusComponent::label, equalTo("parameterisedString"))
-                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "text: $value")))
+                        and has(StatusComponent::report, equalTo(
+                        StatusReport(StatusReport.Priority.INFO,
+                                "text: $value")))
         ))
     }
 
@@ -200,7 +227,9 @@ class ComponentsBuilderTest {
         assertThat(statusComponents, containsOnly(
                 has(StatusComponent::id, equalTo("parameterisedString"))
                         and has(StatusComponent::label, equalTo("parameterisedString"))
-                        and has(StatusComponent::report, equalTo(StatusReport(StatusReport.Priority.INFO, "text: $value")))
+                        and has(StatusComponent::report, equalTo(
+                        StatusReport(StatusReport.Priority.INFO,
+                                "text: $value")))
         ))
     }
 

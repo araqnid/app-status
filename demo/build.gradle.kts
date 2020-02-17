@@ -16,13 +16,13 @@ repositories {
 }
 
 configurations {
-    "testCompile" {
+    "runtimeClasspath" {
         exclude(module = "logback-classic")
     }
 }
 
 dependencies {
-    implementation(rootProject)
+    implementation(project(":guice"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
     implementation("org.slf4j:slf4j-api:${LibraryVersions.slf4j}")
