@@ -4,11 +4,14 @@ plugins {
     id("com.jfrog.bintray") version "1.8.4" apply false
 }
 
+val buildNumber: String? = System.getenv("BUILD_NUMBER")
+val versionPrefix = "0.0"
+
 allprojects {
     group = "org.araqnid.app-status"
 
-    if (rootProject.hasProperty("version"))
-        version = rootProject.property("version").toString()
+    if (buildNumber != null)
+        version = "${versionPrefix}.${buildNumber}"
 }
 
 LibraryVersions.toMap().forEach { (name, value) ->
