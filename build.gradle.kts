@@ -1,24 +1,27 @@
 plugins {
-    java
-    kotlin("jvm") version "1.3.50"
+    kotlin("jvm") version "1.3.61"
     `maven-publish`
     `java-library`
-    id("com.timgroup.webpack") version "1.0.50" apply false
+    id("com.timgroup.webpack") version "1.0.63" apply false
     id("com.jfrog.bintray") version "1.8.4"
 }
 
-group = "org.araqnid"
-
 allprojects {
+    group = "org.araqnid.app-status"
+
     if (rootProject.hasProperty("version"))
         version = rootProject.property("version").toString()
 }
 
-val guavaVersion by extra("26.0-jre")
-val jettyVersion by extra("9.4.12.v20180830")
-val jacksonVersion by extra("2.9.6")
-val resteasyVersion by extra("3.1.4.Final")
-val guiceVersion by extra("4.2.1")
+LibraryVersions.toMap().forEach { (name, value) ->
+    ext["${name}Version"] = value
+}
+
+val guavaVersion: String by extra
+val jacksonVersion: String by extra
+val resteasyVersion: String by extra
+val guiceVersion: String by extra
+val hamkrestVersion: String by extra
 
 val web by configurations.creating
 
@@ -28,15 +31,21 @@ repositories {
 
 dependencies {
     api("com.google.inject:guice:$guiceVersion")
-    api("com.fasterxml.jackson.core:jackson-annotations:2.8.0")
+    api("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
+    api(kotlin("stdlib-jdk8"))
+    api(kotlin("reflect"))
     implementation("com.google.guava:guava:$guavaVersion")
-    implementation(kotlin("stdlib-jdk8"))
-    implementation(kotlin("reflect"))
-    testImplementation("junit:junit:4.12")
-    testImplementation("com.natpryce:hamkrest:1.7.0.0")
+    testImplementation("junit:junit:4.13")
+    testImplementation("com.natpryce:hamkrest:$hamkrestVersion")
     testImplementation("org.araqnid:hamkrest-json:1.1.0")
     testImplementation(kotlin("test-junit"))
     web(project("ui", "web"))
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
 }
 
 tasks {
@@ -64,18 +73,12 @@ tasks {
             from(web)
         }
     }
-
-    register<Jar>("sourcesJar") {
-        archiveClassifier.set("sources")
-        from(sourceSets["main"].allSource)
-    }
 }
 
 publishing {
     publications {
         register<MavenPublication>("mavenJava") {
             from(components["java"])
-            artifact(tasks["sourcesJar"])
         }
     }
 }

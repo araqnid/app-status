@@ -1,6 +1,5 @@
 plugins {
     application
-    `java-library`
     kotlin("jvm")
 }
 
@@ -15,6 +14,7 @@ val jacksonVersion: String by rootProject.extra
 val resteasyVersion: String by rootProject.extra
 val guiceVersion: String by rootProject.extra
 val guavaVersion: String by rootProject.extra
+val hamkrestVersion: String by rootProject.extra
 
 val web by configurations.creating
 

@@ -11,15 +11,11 @@ import com.natpryce.hamkrest.and
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.has
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.ExpectedException
 import javax.inject.Named
 import javax.inject.Qualifier
 
 class ComponentsBuilderTest {
-    @Rule @JvmField val thrown = ExpectedException.none()!!
-
     @Test fun component_returning_string_from_property() {
         val injector = Guice.createInjector(Module(Binder::requireExplicitBindings))
         val componentsBuilder = ComponentsBuilder(injector)

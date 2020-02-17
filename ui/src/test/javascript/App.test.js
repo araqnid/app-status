@@ -46,9 +46,9 @@ it("loads status, version and readiness on mount", async () => {
     component.update();
 
     expect(new Set(mockAxios.history.get.map(it => it.url))).toEqual(new Set(["/_api/info/status", "/_api/info/readiness", "/_api/info/version"]));
-    expect(component.find("h1").text()).toBe("test-app 1.0.0 - OK");
-    expect(component.find("#jvmVersion").text()).toContain("JVM version");
-    expect(component.find("#jvmVersion").text()).toContain("11.0.4");
+    expect(component.find("div#_headline").text()).toBe("test-app 1.0.0 - OK");
+    expect(component.find("div#jvmVersion").text()).toContain("JVM version");
+    expect(component.find("div#jvmVersion").text()).toContain("11.0.4");
     expect(component.find(Readiness).text()).toContain("Application ready");
 });
 
