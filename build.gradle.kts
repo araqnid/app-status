@@ -17,12 +17,6 @@ LibraryVersions.toMap().forEach { (name, value) ->
     ext["${name}Version"] = value
 }
 
-val guavaVersion: String by extra
-val jacksonVersion: String by extra
-val resteasyVersion: String by extra
-val guiceVersion: String by extra
-val hamkrestVersion: String by extra
-
 val web by configurations.creating
 
 repositories {
@@ -30,13 +24,13 @@ repositories {
 }
 
 dependencies {
-    api("com.google.inject:guice:$guiceVersion")
-    api("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
+    api("com.google.inject:guice:${LibraryVersions.guice}")
+    api("com.fasterxml.jackson.core:jackson-annotations:${LibraryVersions.jackson}")
     api(kotlin("stdlib-jdk8"))
     api(kotlin("reflect"))
-    implementation("com.google.guava:guava:$guavaVersion")
+    implementation("com.google.guava:guava:${LibraryVersions.guava}")
     testImplementation("junit:junit:4.13")
-    testImplementation("com.natpryce:hamkrest:$hamkrestVersion")
+    testImplementation("com.natpryce:hamkrest:${LibraryVersions.hamkrest}")
     testImplementation("org.araqnid:hamkrest-json:1.1.0")
     testImplementation(kotlin("test-junit"))
     web(project("ui", "web"))
