@@ -6,7 +6,7 @@ import org.junit.Test
 
 class StatusComponentTest {
     private val report = StatusReport(StatusReport.Priority.WARNING, "Example")
-    private val component = StatusComponent.from("test", "Test") { report }
+    private val component = StatusComponent("test", "Test") { report }
 
     @Test
     fun `can map text of produced reports`() {
