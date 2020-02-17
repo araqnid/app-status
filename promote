@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")"
 
 gradle() {
-  ./gradlew "$@"
+  ./gradlew --no-daemon "$@"
 }
 
 tagged_as=$(git describe --tags)
@@ -28,4 +28,4 @@ BUILD_NUMBER=$next_patchnr gradle clean build
 
 git tag -m "Version $next_version" v$next_version
 
-BUILD_NUMBER=$next_patchnr gradle --no-daemon bintrayUpload
+BUILD_NUMBER=$next_patchnr gradle bintrayUpload
