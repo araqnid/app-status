@@ -1,8 +1,8 @@
 package org.araqnid.appstatus
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.sameInstance
+import org.araqnid.kotlin.assertthat.assertThat
+import org.araqnid.kotlin.assertthat.equalTo
+import org.araqnid.kotlin.assertthat.sameInstance
 import org.junit.Test
 
 class StatusComponentTest {

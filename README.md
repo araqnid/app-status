@@ -1,7 +1,7 @@
 App-Status
 ==========
 
-[ ![Build Status](https://travis-ci.org/araqnid/app-status.svg?branch=master)](https://travis-ci.org/araqnid/app-status) [ ![Download](https://api.bintray.com/packages/araqnid/maven/app-status/images/download.svg) ](https://bintray.com/araqnid/maven/app-status/_latestVersion) [ ![Kotlin](https://img.shields.io/badge/kotlin-1.3.61-blue.svg)](http://kotlinlang.org)
+[ ![Kotlin](https://img.shields.io/badge/kotlin-1.4.30-blue.svg)](http://kotlinlang.org)
 
 When you're running a webservice, you may need a way to monitor if it is currently working, or discovering
 problems with it. This library allows for the application to collect together various monitoring components,
@@ -115,22 +115,6 @@ The app on https://fuel.araqnid.org/
 
 - See the status page at https://fuel.araqnid.org/_status/
 - See the source at https://github.com/araqnid/fuel-log/
-
-Get the library
----------------
-
-App-Status is published on [JCenter](https://bintray.com/bintray/jcenter). You need something like this in
-`build.gradle` or `build.gradle.kts`:
-
-```kotlin
-repositories {
-    jcenter()
-}
-dependencies {
-    compile("org.araqnid:app-status:0.0.13")
-}
-```
-
  
 Related projects
 ----------------

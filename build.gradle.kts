@@ -1,7 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.3.61" apply false
+    kotlin("jvm") version "1.4.30" apply false
     id("com.timgroup.webpack") version "1.0.63" apply false
-    id("com.jfrog.bintray") version "1.8.4" apply false
 }
 
 val buildNumber: String? = System.getenv("BUILD_NUMBER")
@@ -12,8 +11,19 @@ allprojects {
 
     if (buildNumber != null)
         version = "${versionPrefix}.${buildNumber}"
-}
 
-LibraryVersions.toMap().forEach { (name, value) ->
-    ext["${name}Version"] = value
+    repositories {
+        mavenCentral()
+
+        repositories {
+            if (isGithubUserAvailable(project)) {
+                for (repo in listOf("assert-that")) {
+                    maven(url = "https://maven.pkg.github.com/araqnid/$repo") {
+                        name = "github-$repo"
+                        credentials(githubUserCredentials(project))
+                    }
+                }
+            }
+        }
+    }
 }

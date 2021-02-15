@@ -1,7 +1,7 @@
 package org.araqnid.appstatus
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
+import org.araqnid.kotlin.assertthat.assertThat
+import org.araqnid.kotlin.assertthat.equalTo
 import org.junit.Test
 
 class StatusPageTest {

@@ -1,8 +1,8 @@
 package org.araqnid.appstatus
 
-import com.natpryce.hamkrest.anything
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.present
+import org.araqnid.kotlin.assertthat.anything
+import org.araqnid.kotlin.assertthat.assertThat
+import org.araqnid.kotlin.assertthat.present
 import org.junit.Test
 
 class AppVersionTest {
