@@ -89,18 +89,18 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
     }
 
     private fun <T> wrapInvocation(returnType: Class<T>, method: Method, source: Any, providers: Array<Provider<*>>): () -> T {
-        val methodHandle = MethodHandles.lookup().unreflect(method)
+        val methodHandle = MethodHandles.lookup().unreflect(method).bindTo(source)
         return when (providers.size) {
             0 -> {
-                { returnType.cast(methodHandle.invoke(source)) }
+                { returnType.cast(methodHandle.invoke()) }
             }
             1 -> {
-                { returnType.cast(methodHandle.invoke(source, providers[0].get())) }
+                { returnType.cast(methodHandle.invoke(providers[0].get())) }
             }
             else -> {
-                val spreaderHandle = methodHandle.asSpreader(Array<Any>::class.java, providers.size + 1);
+                val spreaderHandle = methodHandle.asSpreader(Array<Any>::class.java, providers.size);
                 {
-                    val args = Array<Any?>(providers.size + 1) { if (it == 0) source else providers[it - 1].get() }
+                    val args = Array<Any?>(providers.size) { providers[it].get() }
                     returnType.cast(spreaderHandle.invoke(args))
                 }
             }
