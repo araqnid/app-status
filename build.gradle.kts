@@ -3,15 +3,12 @@ plugins {
     id("com.timgroup.webpack") version "1.0.63" apply false
 }
 
-val buildNumber: String? = System.getenv("BUILD_NUMBER")
-val versionPrefix = "0.1"
-
 allprojects {
     group = "org.araqnid.app-status"
+    version = "0.1.5"
+}
 
-    if (buildNumber != null)
-        version = "${versionPrefix}.${buildNumber}"
-
+subprojects {
     repositories {
         mavenCentral()
 
