@@ -59,4 +59,11 @@ publishing {
             artifactId = "app-status-core"
         }
     }
+
+    repositories {
+        maven(url = "https://maven.pkg.github.com/araqnid/app-status") {
+            name = "github"
+            credentials(githubUserCredentials(project))
+        }
+    }
 }

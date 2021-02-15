@@ -53,4 +53,11 @@ publishing {
             artifactId = "app-status-guice"
         }
     }
+
+    repositories {
+        maven(url = "https://maven.pkg.github.com/araqnid/app-status") {
+            name = "github"
+            credentials(githubUserCredentials(project))
+        }
+    }
 }
