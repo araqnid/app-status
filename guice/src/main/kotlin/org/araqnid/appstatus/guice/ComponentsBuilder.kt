@@ -89,23 +89,19 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
     }
 
     private fun <T> wrapInvocation(returnType: Class<T>, method: Method, source: Any, providers: Array<Provider<*>>): () -> T {
-        // Kotlin seems to always call MethodHandle.invoke by passing an Object[], hence we always have to use a spreading handle
         val methodHandle = MethodHandles.lookup().unreflect(method)
         return when (providers.size) {
             0 -> {
-                val spreaderHandle = methodHandle.asSpreader(Array<Any>::class.java, 1);
-                { returnType.cast(spreaderHandle.invoke(source)) }
+                { returnType.cast(methodHandle.invoke(source)) }
             }
             1 -> {
-                val provider = providers[0]
-                val spreaderHandle = methodHandle.asSpreader(Array<Any>::class.java, 2);
-                { returnType.cast(spreaderHandle.invoke(source, provider.get())) }
+                { returnType.cast(methodHandle.invoke(source, providers[0].get())) }
             }
             else -> {
                 val spreaderHandle = methodHandle.asSpreader(Array<Any>::class.java, providers.size + 1);
                 {
-                    val args = Array<Any?>(providers.size) { providers[it].get() }
-                    returnType.cast(spreaderHandle.invoke(source, *args))
+                    val args = Array<Any?>(providers.size + 1) { if (it == 0) source else providers[it - 1].get() }
+                    returnType.cast(spreaderHandle.invoke(args))
                 }
             }
         }
