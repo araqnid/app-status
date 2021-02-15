@@ -5,7 +5,7 @@ plugins {
 
 allprojects {
     group = "org.araqnid.app-status"
-    version = "0.1.5"
+    version = "0.1.6"
 }
 
 subprojects {
