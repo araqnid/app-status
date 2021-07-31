@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.4.30" apply false
-    id("com.timgroup.webpack") version "1.0.63" apply false
+    id("com.timgroup.webpack") version "1.0.64" apply false
 }
 
 allprojects {
