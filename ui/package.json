@@ -1,8 +1,8 @@
 {
   "dependencies": {
     "axios": "^0.21.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "regenerator-runtime": "^0.13.7",
     "zen-observable": "^0.8.15"
   },
