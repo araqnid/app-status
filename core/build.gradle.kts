@@ -6,6 +6,8 @@ plugins {
     signing
 }
 
+project.description = "Guice add-on for building status components with dependencies injected"
+
 val web by configurations.creating
 
 dependencies {

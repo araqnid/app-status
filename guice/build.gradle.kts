@@ -6,6 +6,8 @@ plugins {
     signing
 }
 
+project.description = ""
+
 dependencies {
     api(project(":core"))
     api("com.google.inject:guice:${LibraryVersions.guice}")
