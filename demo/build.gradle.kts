@@ -4,16 +4,12 @@ plugins {
 }
 
 application {
-    mainClassName = "org.araqnid.appstatus.demo.Main"
+    mainClass.set("org.araqnid.appstatus.demo.Main")
 }
 
 group = "org.araqnid"
 
 val web by configurations.creating
-
-repositories {
-    jcenter()
-}
 
 configurations {
     "runtimeClasspath" {
