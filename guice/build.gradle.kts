@@ -6,7 +6,7 @@ plugins {
     signing
 }
 
-project.description = ""
+project.description = "Guice add-on for building status components with dependencies injected"
 
 dependencies {
     api(project(":core"))

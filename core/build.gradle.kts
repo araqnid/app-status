@@ -6,7 +6,7 @@ plugins {
     signing
 }
 
-project.description = "Guice add-on for building status components with dependencies injected"
+project.description = "App status page model"
 
 val web by configurations.creating
 
