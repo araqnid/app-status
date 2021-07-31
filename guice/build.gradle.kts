@@ -13,7 +13,7 @@ dependencies {
     api("com.google.inject:guice:${LibraryVersions.guice}")
     implementation(kotlin("reflect"))
     implementation("com.google.guava:guava:${LibraryVersions.guava}")
-    testImplementation("junit:junit:4.13.1")
+    testImplementation("junit:junit:4.13.2")
     testImplementation("org.araqnid.kotlin.assert-that:assert-that:${LibraryVersions.assertThat}")
     testImplementation(kotlin("test-junit"))
 }

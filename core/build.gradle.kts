@@ -14,7 +14,7 @@ dependencies {
     api("com.fasterxml.jackson.core:jackson-annotations:${LibraryVersions.jackson}")
     api(kotlin("stdlib-jdk8"))
     implementation("com.google.guava:guava:${LibraryVersions.guava}")
-    testImplementation("junit:junit:4.13.1")
+    testImplementation("junit:junit:4.13.2")
     testImplementation("org.araqnid.kotlin.assert-that:assert-that:${LibraryVersions.assertThat}")
     testImplementation(kotlin("test-junit"))
     web(project(":ui", "web"))
