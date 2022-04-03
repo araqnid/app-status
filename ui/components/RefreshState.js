@@ -1,13 +1,11 @@
-import React from 'react';
-
 const Button = ({onClick, type = "secondary", children}) => {
     return (
         <button type="button" className={`btn btn-block btn-${type}`} onClick={onClick}>{children}</button>
     )
-};
+}
 
-export const RefreshState = ({paused, interval, controls}) => {
-    const inner = paused ? (
+const RefreshState = ({paused, interval, controls}) => {
+    const inner = paused || !interval ? (
             <>
                 <Button type="secondary" onClick={controls.kick}>Refresh</Button>
                 <Button type="primary" onClick={controls.unpause}>Start auto-refresh</Button>
@@ -18,7 +16,7 @@ export const RefreshState = ({paused, interval, controls}) => {
                 <p className="card-text">Auto-refresh interval: {interval}</p>
                 <Button type="primary" onClick={controls.pause}>Stop auto-refresh</Button>
             </>
-        );
+        )
 
     return (
         <div className="card float-right" style={{ width: "18rem", margin: 16 }}>
@@ -27,5 +25,7 @@ export const RefreshState = ({paused, interval, controls}) => {
                 {inner}
             </div>
         </div>
-    );
-};
+    )
+}
+
+export default RefreshState

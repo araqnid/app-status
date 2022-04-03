@@ -1,6 +1,6 @@
-import React from 'react';
-import {StatusDetails} from "./StatusDetails";
-import {RefreshState} from "./RefreshState";
+import React from 'react'
+import StatusDetails from "./StatusDetails"
+import RefreshState from "./RefreshState"
 
 const Status = ({loadingError, values: { version, status, readiness}, refresh: { paused, interval }, controls}) => {
     if (loadingError !== null) {
@@ -8,13 +8,13 @@ const Status = ({loadingError, values: { version, status, readiness}, refresh: {
             <div key="error">
                 Failed to load status: {loadingError.toString()}
             </div>
-        );
+        )
     }
 
     if (!version || !readiness || !status) {
         return (
             <div key="absent"/>
-        );
+        )
     }
 
     return (
@@ -25,4 +25,4 @@ const Status = ({loadingError, values: { version, status, readiness}, refresh: {
     );
 };
 
-export default Status;
+export default Status

@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.5.31" apply false
-    id("com.timgroup.webpack") version "1.0.64" apply false
+    id("com.github.node-gradle.node") version("3.0.1") apply false
 }
 
 allprojects {
