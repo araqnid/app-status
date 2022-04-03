@@ -12,6 +12,14 @@
     "dev": "next",
     "build": "next build",
     "export": "next export",
-    "start": "serve out"
+    "start": "serve out",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.3",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^14.0.4",
+    "jest": "^27.5.1",
+    "xhr-mock": "^2.5.1"
   }
 }
