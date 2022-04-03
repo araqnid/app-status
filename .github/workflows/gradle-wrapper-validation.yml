@@ -2,9 +2,9 @@ name: "Validate Gradle Wrapper"
 on:
   push:
     paths-ignore:
-      - ui/*
+      - ui/**
       - README.md
-      - docs/*
+      - docs/**
 
 jobs:
   validation:
