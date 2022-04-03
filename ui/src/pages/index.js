@@ -3,7 +3,6 @@ import Head from 'next/head'
 import {statusLoader} from '../components/StatusLoader'
 import Status from '../components/Status'
 import LoadingIndicator from '../components/LoadingIndicator'
-import 'bootstrap/dist/css/bootstrap.css'
 
 export default function IndexPage() {
     const [paused, setPaused] = useState(false)
@@ -74,7 +73,6 @@ export default function IndexPage() {
         <main>
             <Head>
                 <title>Status</title>
-                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
             </Head>
 
             <section>
