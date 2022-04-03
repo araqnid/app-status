@@ -4,3 +4,5 @@ include("demo")
 include("ui")
 include("core")
 include("guice")
+
+includeBuild("nextjs-site")
