@@ -14,8 +14,7 @@ tasks.named("yarn_export").configure {
 }
 
 val nextBuild by tasks.registering(YarnTask::class) {
-    inputs.files(fileTree("pages"))
-    inputs.files(fileTree("components"))
+    inputs.files(fileTree("src"))
     outputs.dir(".next")
     dependsOn("yarn")
     args.set(listOf("next", "build"))
