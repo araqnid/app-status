@@ -37,12 +37,12 @@ themselves as ready.
 This is simply a list of health checks inside the application: each component produces a report that can include a
 priority of ok/warning/critical, or just be informational. For example:
 
-Id            | Label               | Priority | Text
---------------|---------------------|----------|-----------------------------------------
-jvmVersion    | JVM version         | Info     | 9.0.1
-kotlinVersion | Kotlin version      | Info     | 1.2.0
-dbConnection  | Database connection | Ok       | Last checked 2s ago
-mailQueueSize | Mail queue size     | Warning  | 95 items in queue (oldest is 12m7s old)
+| Id            | Label               | Priority | Text                                    |
+|---------------|---------------------|----------|-----------------------------------------|
+| jvmVersion    | JVM version         | Info     | 9.0.1                                   |
+| kotlinVersion | Kotlin version      | Info     | 1.2.0                                   |
+| dbConnection  | Database connection | Ok       | Last checked 2s ago                     |
+| mailQueueSize | Mail queue size     | Warning  | 95 items in queue (oldest is 12m7s old) |
 
 The page produces an aggregated priority (which would be "warning" for the above list) and the supplied UI presents
 each of these items on a page highlighted in grey/green/yellow/red etc
