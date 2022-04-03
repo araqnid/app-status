@@ -11,11 +11,11 @@ project.description = "App status page model"
 val web by configurations.creating
 
 dependencies {
-    api("com.fasterxml.jackson.core:jackson-annotations:${LibraryVersions.jackson}")
+    api("com.fasterxml.jackson.core:jackson-annotations:2.10.2")
     api(kotlin("stdlib-jdk8"))
-    implementation("com.google.guava:guava:${LibraryVersions.guava}")
+    implementation("com.google.guava:guava:28.2-jre")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.araqnid.kotlin.assert-that:assert-that:${LibraryVersions.assertThat}")
+    testImplementation("org.araqnid.kotlin.assert-that:assert-that:0.1.1")
     testImplementation(kotlin("test-junit"))
     web(project(":ui", "web"))
 }
