@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "export": "next export -o build/site",
+    "export": "next export",
     "start": "serve out"
   }
 }
