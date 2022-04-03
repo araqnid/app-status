@@ -18,13 +18,14 @@ configurations {
 }
 
 dependencies {
+    val slf4jVersion = "1.7.30"
     val jettyVersion = "9.4.26.v20200117"
     val resteasyVersion = "3.1.4.Final"
     val jacksonVersion = "2.10.2"
     implementation(project(":guice"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
-    implementation("org.slf4j:slf4j-api:$jettyVersion")
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("org.eclipse.jetty:jetty-server:$jettyVersion")
     implementation("org.eclipse.jetty:jetty-servlet:$jettyVersion")
     implementation("org.jboss.resteasy:resteasy-jaxrs:$resteasyVersion")
@@ -35,7 +36,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    runtimeOnly("org.slf4j:slf4j-simple:$jettyVersion")
+    runtimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
     web(project(":ui", "web"))
 }
 
