@@ -21,7 +21,7 @@ dependencies {
     val slf4jVersion = "1.7.30"
     val jettyVersion = "9.4.26.v20200117"
     val resteasyVersion = "3.1.4.Final"
-    val jacksonVersion = "2.10.2"
+    val jacksonVersion = "2.13.2"
     implementation(project(":guice"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
