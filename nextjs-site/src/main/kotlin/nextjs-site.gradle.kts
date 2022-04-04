@@ -17,6 +17,8 @@ val nextBuild by tasks.registering(YarnTask::class) {
     description = "Build Next.js server"
     inputs.files(fileTree("src"))
     inputs.files(file("next.config.js"))
+    inputs.files(file("package.json"))
+    inputs.files(file("yarn.lock"))
     outputs.dir(".next")
     dependsOn("yarn")
     args.set(listOf("next", "build"))
