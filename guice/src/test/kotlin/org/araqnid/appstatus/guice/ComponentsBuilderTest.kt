@@ -1,13 +1,7 @@
 package org.araqnid.appstatus.guice
 
-import com.google.inject.AbstractModule
-import com.google.inject.Binder
-import com.google.inject.Guice
-import com.google.inject.Key
-import com.google.inject.Module
-import com.google.inject.TypeLiteral
+import com.google.inject.*
 import com.google.inject.name.Names
-import org.araqnid.appstatus.OnStatusPage
 import org.araqnid.appstatus.StatusComponent
 import org.araqnid.appstatus.StatusReport
 import org.araqnid.kotlin.assertthat.*

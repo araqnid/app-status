@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList
 import com.google.inject.BindingAnnotation
 import com.google.inject.Injector
 import com.google.inject.Key
-import org.araqnid.appstatus.OnStatusPage
 import org.araqnid.appstatus.StatusComponent
 import org.araqnid.appstatus.StatusReport
 import java.lang.invoke.MethodHandles
