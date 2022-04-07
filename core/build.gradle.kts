@@ -67,14 +67,14 @@ publishing {
                         url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
                     }
                 }
-                url.set("https://github.com/araqnid/hamkrest-json")
+                url.set("https://github.com/araqnid/app-status")
                 issueManagement {
                     system.set("Github")
-                    url.set("https://github.com/araqnid/hamkrest-json/issues")
+                    url.set("https://github.com/araqnid/app-status/issues")
                 }
                 scm {
-                    connection.set("https://github.com/araqnid/hamkrest-json.git")
-                    url.set("https://github.com/araqnid/hamkrest-json")
+                    connection.set("https://github.com/araqnid/app-status.git")
+                    url.set("https://github.com/araqnid/app-status")
                 }
                 developers {
                     developer {
