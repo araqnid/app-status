@@ -12,7 +12,6 @@ project.description = "App status page model"
 val web by configurations.creating
 
 dependencies {
-    api("com.fasterxml.jackson.core:jackson-annotations:2.10.2")
     api(kotlin("stdlib-jdk8"))
     implementation(platform("org.jetbrains.kotlinx:kotlinx-serialization-bom:1.3.1"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
