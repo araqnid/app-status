@@ -14,7 +14,7 @@ val web by configurations.creating
 dependencies {
     api("com.fasterxml.jackson.core:jackson-annotations:2.10.2")
     api(kotlin("stdlib-jdk8"))
-    implementation(platform("org.jetbrains.kotlinx:kotlinx-serialization-bom:1.3.1"))
+    implementation(platform("org.jetbrains.kotlinx:kotlinx-serialization-bom:1.3.2"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
     implementation("com.google.guava:guava:28.2-jre")
     testImplementation("junit:junit:4.13.2")
