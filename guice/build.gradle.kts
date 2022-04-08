@@ -9,7 +9,7 @@ plugins {
 project.description = "Guice add-on for building status components with dependencies injected"
 
 dependencies {
-    val guavaVersion = "28.2-jre"
+    val guavaVersion = "31.1-jre"
     api(project(":core"))
     api("com.google.inject:guice:4.2.1")
     implementation(kotlin("reflect"))
