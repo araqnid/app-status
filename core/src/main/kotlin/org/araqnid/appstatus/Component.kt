@@ -54,7 +54,7 @@ private data class FixedComponent(override val id: String, override val name: St
     }
 }
 
-fun Component.limitPriority(maxStatus: Status): Component {
+fun Component.limitPriority(maxStatus: Report.Status): Component {
     return object : Component {
         override val id: String
             get() = this@limitPriority.id

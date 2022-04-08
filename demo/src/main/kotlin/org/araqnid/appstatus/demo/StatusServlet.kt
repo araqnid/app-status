@@ -5,7 +5,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToStream
 import org.araqnid.appstatus.AppStatus
 import org.araqnid.appstatus.AppStatusReport
-import org.araqnid.appstatus.Status
+import org.araqnid.appstatus.Report
 import org.araqnid.appstatus.toReport
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
@@ -25,10 +25,10 @@ class StatusServlet(private val appStatus: AppStatus) : HttpServlet() {
 private data class StatusPageReport(val label: String, val priority: String, val text: String)
 
 @Serializable
-private data class StatusPage(val status: Status, val components: Map<String, StatusPageReport>)
+private data class StatusPage(val status: Report.Status?, val components: Map<String, StatusPageReport>)
 
 private fun AppStatusReport.toPage() = StatusPage(
-    status = Status.OK,
+    status = reports.values.mapNotNull { it.status }.maxOrNull(),
     components = reports.mapValues { (_, report) ->
         StatusPageReport(
             report.name,

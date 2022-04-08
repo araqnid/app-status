@@ -13,7 +13,7 @@ data class AppStatusReport(
 @Serializable
 data class ComponentReport(
     val name: String,
-    val status: Status?,
+    val status: Report.Status?,
     val text: String
 )
 

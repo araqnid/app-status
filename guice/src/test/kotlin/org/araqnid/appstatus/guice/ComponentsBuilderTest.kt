@@ -4,7 +4,6 @@ import com.google.inject.*
 import com.google.inject.name.Names
 import org.araqnid.appstatus.ComponentReport
 import org.araqnid.appstatus.Report
-import org.araqnid.appstatus.Status
 import org.araqnid.appstatus.toReport
 import org.araqnid.kotlin.assertthat.assertThat
 import org.araqnid.kotlin.assertthat.equalTo
@@ -34,12 +33,12 @@ class ComponentsBuilderTest {
         val componentsBuilder = ComponentsBuilder(injector)
         val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
-            val fixedReport = Report(Status.OK, "test report")
+            val fixedReport = Report(Report.Status.OK, "test report")
         }).toReport()
 
         assertThat(
             appReport.reports,
-            equalTo(mapOf("fixedReport" to ComponentReport("fixedReport", Status.OK, "test report")))
+            equalTo(mapOf("fixedReport" to ComponentReport("fixedReport", Report.Status.OK, "test report")))
         )
     }
 
@@ -66,12 +65,12 @@ class ComponentsBuilderTest {
         val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
             val fixedReport
-                get() = Report(Status.OK, "test report")
+                get() = Report(Report.Status.OK, "test report")
         }).toReport()
 
         assertThat(
             appReport.reports,
-            equalTo(mapOf("fixedReport" to ComponentReport("fixedReport", Status.OK, "test report")))
+            equalTo(mapOf("fixedReport" to ComponentReport("fixedReport", Report.Status.OK, "test report")))
         )
     }
 
@@ -96,12 +95,12 @@ class ComponentsBuilderTest {
         val componentsBuilder = ComponentsBuilder(injector)
         val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
-            fun fixedReport() = Report(Status.OK, "test report")
+            fun fixedReport() = Report(Report.Status.OK, "test report")
         }).toReport()
 
         assertThat(
             appReport.reports,
-            equalTo(mapOf("fixedReport" to ComponentReport("fixedReport", Status.OK, "test report")))
+            equalTo(mapOf("fixedReport" to ComponentReport("fixedReport", Report.Status.OK, "test report")))
         )
     }
 

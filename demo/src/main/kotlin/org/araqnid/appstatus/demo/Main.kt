@@ -3,7 +3,6 @@ package org.araqnid.appstatus.demo
 import org.araqnid.appstatus.Component
 import org.araqnid.appstatus.MutableAppStatus
 import org.araqnid.appstatus.Report
-import org.araqnid.appstatus.Status
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.servlet.ServletContextHandler
@@ -18,9 +17,9 @@ private val appStatus = MutableAppStatus("demo", "demo").apply {
     register(Component.info("info-test", "Test info component") { "jiffies = $jiffies" })
     register(Component.from("report-test", "Prioritised component") {
         when (jiffies / 2 % 3) {
-            1 -> Report(Status.WARNING, "the warning content")
-            2 -> Report(Status.CRITICAL, "the critical content")
-            else -> Report(Status.OK, "the ok content")
+            1 -> Report(Report.Status.WARNING, "the warning content")
+            2 -> Report(Report.Status.CRITICAL, "the critical content")
+            else -> Report(Report.Status.OK, "the ok content")
         }
     })
 }

@@ -6,7 +6,7 @@ import org.araqnid.kotlin.assertthat.sameInstance
 import org.junit.Test
 
 class ComponentTest {
-    private val report = Report(Status.WARNING, "Example")
+    private val report = Report(Report.Status.WARNING, "Example")
     private val component = Component.from("test", "Test") { report }
 
     @Test
@@ -20,8 +20,8 @@ class ComponentTest {
     @Test
     fun `can limit priority of produced reports`() {
         assertThat(
-            component.limitPriority(Status.OK).report(),
-            equalTo(report.copy(status = Status.OK))
+            component.limitPriority(Report.Status.OK).report(),
+            equalTo(report.copy(status = Report.Status.OK))
         )
     }
 

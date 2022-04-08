@@ -5,7 +5,7 @@ import org.araqnid.kotlin.assertthat.equalTo
 import org.junit.Test
 
 class ReportTest {
-    private val baseReport = Report(Status.WARNING, "basic text")
+    private val baseReport = Report(Report.Status.WARNING, "basic text")
 
     @Test
     fun `toString has specific output`() {
@@ -14,6 +14,6 @@ class ReportTest {
 
     @Test
     fun `can limit priority of report`() {
-        assertThat(baseReport.limitPriority(Status.OK), equalTo(Report(Status.OK, "basic text")))
+        assertThat(baseReport.limitPriority(Report.Status.OK), equalTo(Report(Report.Status.OK, "basic text")))
     }
 }
