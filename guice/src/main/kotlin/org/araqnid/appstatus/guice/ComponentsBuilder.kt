@@ -40,7 +40,7 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
     private fun makeComponentFromProperty(source: Any, property: KProperty1<*, *>): Component? {
         val annotation = property.findAnnotation<OnStatusPage>() ?: return null
         val id = property.name
-        val label = if (annotation.label.isEmpty()) id else annotation.label
+        val label = annotation.label.ifEmpty { id }
         val method = property.getter.javaMethod ?: throw IllegalStateException("No getter for $property")
         val providers = providersForMethod(method)
         return when (property.returnType.javaType) {
@@ -62,7 +62,7 @@ class ComponentsBuilder @Inject constructor(val injector: Injector) {
         val annotation = function.findAnnotation<OnStatusPage>() ?: return null
         if (function.name.indexOf('$') >= 0) return null
         val id = function.name
-        val label = if (annotation.label.isEmpty()) id else annotation.label
+        val label = annotation.label.ifEmpty { id }
         val method = function.javaMethod ?: throw IllegalStateException("No method for $function")
         val providers = providersForMethod(method)
         return when (function.returnType.javaType) {
