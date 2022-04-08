@@ -9,11 +9,9 @@ plugins {
 project.description = "Guice add-on for building status components with dependencies injected"
 
 dependencies {
-    val guavaVersion = "28.2-jre"
     api(project(":core"))
     api("com.google.inject:guice:4.2.1")
     implementation(kotlin("reflect"))
-    implementation("com.google.guava:guava:$guavaVersion")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.araqnid.kotlin.assert-that:assert-that:0.1.1")
     testImplementation(kotlin("test-junit"))

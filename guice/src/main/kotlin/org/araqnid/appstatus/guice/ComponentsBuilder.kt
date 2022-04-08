@@ -1,6 +1,5 @@
 package org.araqnid.appstatus.guice
 
-import com.google.common.collect.ImmutableList
 import com.google.inject.BindingAnnotation
 import com.google.inject.Injector
 import com.google.inject.Key
@@ -22,12 +21,12 @@ import kotlin.reflect.jvm.javaType
 
 class ComponentsBuilder @Inject constructor(val injector: Injector) {
     fun buildStatusComponents(vararg sources: Any): Collection<Component> {
-        val components = mutableListOf<Component>()
-        sources.forEach { source ->
-            source.javaClass.kotlin.functions.mapNotNullTo(components) { makeComponentFromFunction(source, it) }
-            source.javaClass.kotlin.memberProperties.mapNotNullTo(components) { makeComponentFromProperty(source, it) }
+        return buildList {
+            for (source in sources) {
+                source.javaClass.kotlin.functions.mapNotNullTo(this) { makeComponentFromFunction(source, it) }
+                source.javaClass.kotlin.memberProperties.mapNotNullTo(this) { makeComponentFromProperty(source, it) }
+            }
         }
-        return ImmutableList.copyOf(components)
     }
 
     fun buildAppStatus(name: String, version: String, vararg sources: Any): MutableAppStatus {
