@@ -1,9 +1,9 @@
 package org.araqnid.appstatus.demo
 
+import jakarta.servlet.http.HttpServlet
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.araqnid.appstatus.AppStatus
-import javax.servlet.http.HttpServlet
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 class ReadinessServlet(private val appStatus: AppStatus) : HttpServlet() {
     override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {

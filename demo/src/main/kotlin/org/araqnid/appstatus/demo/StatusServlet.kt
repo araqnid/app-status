@@ -1,5 +1,8 @@
 package org.araqnid.appstatus.demo
 
+import jakarta.servlet.http.HttpServlet
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToStream
@@ -7,9 +10,6 @@ import org.araqnid.appstatus.AppStatus
 import org.araqnid.appstatus.AppStatusReport
 import org.araqnid.appstatus.Report
 import org.araqnid.appstatus.toReport
-import javax.servlet.http.HttpServlet
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 class StatusServlet(private val appStatus: AppStatus) : HttpServlet() {
     override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {

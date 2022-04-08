@@ -1,12 +1,12 @@
 package org.araqnid.appstatus.demo
 
+import jakarta.servlet.http.HttpServlet
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToStream
 import org.araqnid.appstatus.AppStatus
-import javax.servlet.http.HttpServlet
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 class VersionServlet(appStatus: AppStatus) : HttpServlet() {
     private val appVersion = AppVersion(appStatus.applicationName, appStatus.applicationVersion)

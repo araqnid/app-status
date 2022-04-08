@@ -20,7 +20,15 @@ configurations {
 
 dependencies {
     val slf4jVersion = "1.7.36"
-    val jettyVersion = "9.4.46.v20220331"
+    val jettyVersion = "11.0.9"
+    constraints {
+        add("implementation", "org.slf4j:slf4j-api") {
+            version {
+                strictly("[1.7, 1.8[")
+                prefer(slf4jVersion)
+            }
+        }
+    }
     implementation(project(":guice"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
@@ -29,6 +37,7 @@ dependencies {
     implementation("org.eclipse.jetty:jetty-servlet:$jettyVersion")
     implementation(platform("org.jetbrains.kotlinx:kotlinx-serialization-bom:1.3.2"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
+    implementation("jakarta.servlet:jakarta.servlet-api:5.0.0")
     runtimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
     web(project(":ui", "web"))
 }
