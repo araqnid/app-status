@@ -2,6 +2,7 @@ import java.net.URI
 
 plugins {
     kotlin("jvm")
+    kotlin("plugin.serialization")
     `maven-publish`
     signing
 }
@@ -13,6 +14,8 @@ val web by configurations.creating
 dependencies {
     api("com.fasterxml.jackson.core:jackson-annotations:2.10.2")
     api(kotlin("stdlib-jdk8"))
+    implementation(platform("org.jetbrains.kotlinx:kotlinx-serialization-bom:1.3.1"))
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
     implementation("com.google.guava:guava:28.2-jre")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.araqnid.kotlin.assert-that:assert-that:0.1.1")
@@ -38,7 +41,6 @@ tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
         kotlinOptions {
             jvmTarget = "1.8"
-            freeCompilerArgs = listOf("-Xjvm-default=enable")
         }
     }
 

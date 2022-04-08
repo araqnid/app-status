@@ -2,9 +2,12 @@ package org.araqnid.appstatus.guice
 
 import com.google.inject.*
 import com.google.inject.name.Names
-import org.araqnid.appstatus.StatusComponent
-import org.araqnid.appstatus.StatusReport
-import org.araqnid.kotlin.assertthat.*
+import org.araqnid.appstatus.ComponentReport
+import org.araqnid.appstatus.Report
+import org.araqnid.appstatus.Status
+import org.araqnid.appstatus.toReport
+import org.araqnid.kotlin.assertthat.assertThat
+import org.araqnid.kotlin.assertthat.equalTo
 import org.junit.Test
 import javax.inject.Named
 import javax.inject.Qualifier
@@ -14,24 +17,14 @@ class ComponentsBuilderTest {
     fun component_returning_string_from_property() {
         val injector = Guice.createInjector(Module(Binder::requireExplicitBindings))
         val componentsBuilder = ComponentsBuilder(injector)
-        val statusComponents = componentsBuilder.buildStatusComponents(object {
+        val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
             val fixedString = "test text"
-        })
+        }).toReport()
+
         assertThat(
-            statusComponents, containsOnly(
-                has(StatusComponent::id, equalTo("fixedString"))
-                        and has(StatusComponent::label, equalTo("fixedString"))
-                        and has(
-                    "report", StatusComponent::report,
-                    equalTo(
-                        StatusReport(
-                            StatusReport.Priority.INFO,
-                            "test text"
-                        )
-                    )
-                )
-            )
+            appReport.reports,
+            equalTo(mapOf("fixedString" to ComponentReport("fixedString", null, "test text")))
         )
     }
 
@@ -39,26 +32,14 @@ class ComponentsBuilderTest {
     fun component_returning_report_from_property() {
         val injector = Guice.createInjector(Module(Binder::requireExplicitBindings))
         val componentsBuilder = ComponentsBuilder(injector)
-        val statusComponents = componentsBuilder.buildStatusComponents(object {
+        val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
-            val fixedReport = StatusReport(
-                StatusReport.Priority.OK,
-                "test report"
-            )
-        })
+            val fixedReport = Report(Status.OK, "test report")
+        }).toReport()
+
         assertThat(
-            statusComponents, containsOnly(
-                has(StatusComponent::id, equalTo("fixedReport"))
-                        and has(StatusComponent::label, equalTo("fixedReport"))
-                        and has(
-                    "report", StatusComponent::report, equalTo(
-                        StatusReport(
-                            StatusReport.Priority.OK,
-                            "test report"
-                        )
-                    )
-                )
-            )
+            appReport.reports,
+            equalTo(mapOf("fixedReport" to ComponentReport("fixedReport", Status.OK, "test report")))
         )
     }
 
@@ -66,24 +47,15 @@ class ComponentsBuilderTest {
     fun component_returning_string_from_property_with_get_accessor() {
         val injector = Guice.createInjector(Module(Binder::requireExplicitBindings))
         val componentsBuilder = ComponentsBuilder(injector)
-        val statusComponents = componentsBuilder.buildStatusComponents(object {
+        val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
             val fixedString
                 get() = "test text"
-        })
+        }).toReport()
+
         assertThat(
-            statusComponents, containsOnly(
-                has(StatusComponent::id, equalTo("fixedString"))
-                        and has(StatusComponent::label, equalTo("fixedString"))
-                        and has(
-                    "report", StatusComponent::report, equalTo(
-                        StatusReport(
-                            StatusReport.Priority.INFO,
-                            "test text"
-                        )
-                    )
-                )
-            )
+            appReport.reports,
+            equalTo(mapOf("fixedString" to ComponentReport("fixedString", null, "test text")))
         )
     }
 
@@ -91,27 +63,15 @@ class ComponentsBuilderTest {
     fun component_returning_report_from_property_with_get_accessor() {
         val injector = Guice.createInjector(Module(Binder::requireExplicitBindings))
         val componentsBuilder = ComponentsBuilder(injector)
-        val statusComponents = componentsBuilder.buildStatusComponents(object {
+        val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
             val fixedReport
-                get() = StatusReport(
-                    StatusReport.Priority.OK,
-                    "test report"
-                )
-        })
+                get() = Report(Status.OK, "test report")
+        }).toReport()
+
         assertThat(
-            statusComponents, containsOnly(
-                has(StatusComponent::id, equalTo("fixedReport"))
-                        and has(StatusComponent::label, equalTo("fixedReport"))
-                        and has(
-                    "report", StatusComponent::report, equalTo(
-                        StatusReport(
-                            StatusReport.Priority.OK,
-                            "test report"
-                        )
-                    )
-                )
-            )
+            appReport.reports,
+            equalTo(mapOf("fixedReport" to ComponentReport("fixedReport", Status.OK, "test report")))
         )
     }
 
@@ -119,23 +79,14 @@ class ComponentsBuilderTest {
     fun component_returning_string_from_no_args() {
         val injector = Guice.createInjector(Module(Binder::requireExplicitBindings))
         val componentsBuilder = ComponentsBuilder(injector)
-        val statusComponents = componentsBuilder.buildStatusComponents(object {
+        val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
             fun fixedString() = "test text"
-        })
+        }).toReport()
+
         assertThat(
-            statusComponents, containsOnly(
-                has(StatusComponent::id, equalTo("fixedString"))
-                        and has(StatusComponent::label, equalTo("fixedString"))
-                        and has(
-                    "report", StatusComponent::report, equalTo(
-                        StatusReport(
-                            StatusReport.Priority.INFO,
-                            "test text"
-                        )
-                    )
-                )
-            )
+            appReport.reports,
+            equalTo(mapOf("fixedString" to ComponentReport("fixedString", null, "test text")))
         )
     }
 
@@ -143,26 +94,14 @@ class ComponentsBuilderTest {
     fun component_returning_report_from_no_args() {
         val injector = Guice.createInjector(Module(Binder::requireExplicitBindings))
         val componentsBuilder = ComponentsBuilder(injector)
-        val statusComponents = componentsBuilder.buildStatusComponents(object {
+        val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
-            fun fixedReport() = StatusReport(
-                StatusReport.Priority.OK,
-                "test report"
-            )
-        })
+            fun fixedReport() = Report(Status.OK, "test report")
+        }).toReport()
+
         assertThat(
-            statusComponents, containsOnly(
-                has(StatusComponent::id, equalTo("fixedReport"))
-                        and has(StatusComponent::label, equalTo("fixedReport"))
-                        and has(
-                    "report", StatusComponent::report, equalTo(
-                        StatusReport(
-                            StatusReport.Priority.OK,
-                            "test report"
-                        )
-                    )
-                )
-            )
+            appReport.reports,
+            equalTo(mapOf("fixedReport" to ComponentReport("fixedReport", Status.OK, "test report")))
         )
     }
 
@@ -178,23 +117,14 @@ class ComponentsBuilderTest {
             }
         })
         val componentsBuilder = ComponentsBuilder(injector)
-        val statusComponents = componentsBuilder.buildStatusComponents(object {
+        val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
             fun parameterisedString(v: Test) = "text: ${v.value}"
-        })
+        }).toReport()
+
         assertThat(
-            statusComponents, containsOnly(
-                has(StatusComponent::id, equalTo("parameterisedString"))
-                        and has(StatusComponent::label, equalTo("parameterisedString"))
-                        and has(
-                    "report", StatusComponent::report, equalTo(
-                        StatusReport(
-                            StatusReport.Priority.INFO,
-                            "text: $value"
-                        )
-                    )
-                )
-            )
+            appReport.reports,
+            equalTo(mapOf("parameterisedString" to ComponentReport("parameterisedString", null, "text: $value")))
         )
     }
 
@@ -209,23 +139,14 @@ class ComponentsBuilderTest {
             }
         })
         val componentsBuilder = ComponentsBuilder(injector)
-        val statusComponents = componentsBuilder.buildStatusComponents(object {
+        val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
             fun parameterisedString(v: ParameterisedTest<String>) = "text: ${v.value}"
-        })
+        }).toReport()
+
         assertThat(
-            statusComponents, containsOnly(
-                has(StatusComponent::id, equalTo("parameterisedString"))
-                        and has(StatusComponent::label, equalTo("parameterisedString"))
-                        and has(
-                    "report", StatusComponent::report, equalTo(
-                        StatusReport(
-                            StatusReport.Priority.INFO,
-                            "text: $value"
-                        )
-                    )
-                )
-            )
+            appReport.reports,
+            equalTo(mapOf("parameterisedString" to ComponentReport("parameterisedString", null, "text: $value")))
         )
     }
 
@@ -244,23 +165,14 @@ class ComponentsBuilderTest {
             }
         })
         val componentsBuilder = ComponentsBuilder(injector)
-        val statusComponents = componentsBuilder.buildStatusComponents(object {
+        val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
             fun parameterisedString(a: Alpha, b: Beta) = "text: ${a.value} - ${b.value}"
-        })
+        }).toReport()
+
         assertThat(
-            statusComponents, containsOnly(
-                has(StatusComponent::id, equalTo("parameterisedString"))
-                        and has(StatusComponent::label, equalTo("parameterisedString"))
-                        and has(
-                    "report", StatusComponent::report, equalTo(
-                        StatusReport(
-                            StatusReport.Priority.INFO,
-                            "text: $alphaValue - $betaValue"
-                        )
-                    )
-                )
-            )
+            appReport.reports,
+            equalTo(mapOf("parameterisedString" to ComponentReport("parameterisedString", null, "text: $alphaValue - $betaValue")))
         )
     }
 
@@ -276,23 +188,14 @@ class ComponentsBuilderTest {
             }
         })
         val componentsBuilder = ComponentsBuilder(injector)
-        val statusComponents = componentsBuilder.buildStatusComponents(object {
+        val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
             fun parameterisedString(@Named("test") v: Test) = "text: ${v.value}"
-        })
+        }).toReport()
+
         assertThat(
-            statusComponents, containsOnly(
-                has(StatusComponent::id, equalTo("parameterisedString"))
-                        and has(StatusComponent::label, equalTo("parameterisedString"))
-                        and has(
-                    "report", StatusComponent::report, equalTo(
-                        StatusReport(
-                            StatusReport.Priority.INFO,
-                            "text: $value"
-                        )
-                    )
-                )
-            )
+            appReport.reports,
+            equalTo(mapOf("parameterisedString" to ComponentReport("parameterisedString", null, "text: $value")))
         )
     }
 
@@ -308,23 +211,14 @@ class ComponentsBuilderTest {
             }
         })
         val componentsBuilder = ComponentsBuilder(injector)
-        val statusComponents = componentsBuilder.buildStatusComponents(object {
+        val appReport = componentsBuilder.buildAppStatus("test", "test", object {
             @OnStatusPage
             fun parameterisedString(@TestAnnotation v: Test) = "text: ${v.value}"
-        })
+        }).toReport()
+
         assertThat(
-            statusComponents, containsOnly(
-                has(StatusComponent::id, equalTo("parameterisedString"))
-                        and has(StatusComponent::label, equalTo("parameterisedString"))
-                        and has(
-                    "report", StatusComponent::report, equalTo(
-                        StatusReport(
-                            StatusReport.Priority.INFO,
-                            "text: $value"
-                        )
-                    )
-                )
-            )
+            appReport.reports,
+            equalTo(mapOf("parameterisedString" to ComponentReport("parameterisedString", null, "text: $value")))
         )
     }
 
