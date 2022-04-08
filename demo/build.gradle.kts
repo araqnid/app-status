@@ -20,7 +20,7 @@ configurations {
 
 dependencies {
     val slf4jVersion = "1.7.36"
-    val jettyVersion = "9.4.46.v20220331"
+    val jettyVersion = "11.0.9"
     implementation(project(":guice"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
