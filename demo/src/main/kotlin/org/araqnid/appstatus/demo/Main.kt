@@ -4,6 +4,7 @@ import org.araqnid.appstatus.Component
 import org.araqnid.appstatus.MutableAppStatus
 import org.araqnid.appstatus.Report
 import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.server.handler.gzip.GzipHandler
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.servlet.ServletContextHandler
 import org.eclipse.jetty.servlet.ServletHolder
@@ -27,15 +28,17 @@ private val appStatus = MutableAppStatus("demo", "demo").apply {
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val jettyServer = Server(System.getenv("PORT")?.toInt() ?: 8080)
-        val servletContext = ServletContextHandler()
-        servletContext.resourceBase = System.getenv("DOCUMENT_ROOT") ?: "ui/build/site"
-        servletContext.addServlet(ServletHolder(StatusServlet(appStatus)), "/_api/info/status")
-        servletContext.addServlet(ServletHolder(ReadinessServlet(appStatus)), "/_api/info/readiness")
-        servletContext.addServlet(ServletHolder(VersionServlet(appStatus)), "/_api/info/version")
-        servletContext.addServlet(DefaultServlet::class.java, "/")
-        jettyServer.handler = servletContext
-        jettyServer.stopAtShutdown = true
+        val jettyServer = Server(System.getenv("PORT")?.toInt() ?: 8080).apply {
+            handler = ServletContextHandler().apply {
+                resourceBase = System.getenv("DOCUMENT_ROOT") ?: "ui/build/site"
+                addServlet(ServletHolder(StatusServlet(appStatus)), "/_api/info/status")
+                addServlet(ServletHolder(ReadinessServlet(appStatus)), "/_api/info/readiness")
+                addServlet(ServletHolder(VersionServlet(appStatus)), "/_api/info/version")
+                addServlet(DefaultServlet::class.java, "/")
+                insertHandler(GzipHandler())
+            }
+            stopAtShutdown = true
+        }
         jettyServer.start()
     }
 }
