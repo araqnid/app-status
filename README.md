@@ -3,7 +3,7 @@ App-Status
 
 [ ![Kotlin](https://img.shields.io/badge/kotlin-1.6.20-blue.svg)](http://kotlinlang.org)
 [![Gradle Build](https://github.com/araqnid/app-status/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/araqnid/app-status/actions/workflows/gradle-build.yml)
-[![Maven Central](https://img.shields.io/maven-central/v/org.araqnid.app-status/app-status-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.araqnid.app-status%22%20AND%20a%3A%22app-status-core%22)
+[![Maven Central](https://img.shields.io/maven-central/v/org.araqnid.app-status/app-status-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.araqnid.app-status%22)
 
 When you're running a webservice, you may need a way to monitor if it is currently working, or discovering
 problems with it. This library allows for the application to collect together various monitoring components,
