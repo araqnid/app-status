@@ -19,7 +19,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^14.0.4",
-    "jest": "^27.5.1",
+    "jest": "^28.1.2",
     "jest-junit": "^13.1.0",
     "xhr-mock": "^2.5.1"
   }
