@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.6.21" apply false
-    kotlin("plugin.serialization") version "1.6.21" apply false
+    kotlin("plugin.serialization") version "1.7.10" apply false
     id("com.github.node-gradle.node") version("3.0.1") apply false
 }
 
