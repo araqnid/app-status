@@ -37,7 +37,7 @@ dependencies {
     implementation("org.eclipse.jetty:jetty-servlet:$jettyVersion")
     implementation(platform("org.jetbrains.kotlinx:kotlinx-serialization-bom:1.3.3"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
-    implementation("jakarta.servlet:jakarta.servlet-api:5.0.0")
+    implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
     runtimeOnly("org.slf4j:slf4j-simple:$slf4jVersion")
     web(project(":ui", "web"))
 }
