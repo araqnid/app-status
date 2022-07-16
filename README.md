@@ -1,7 +1,7 @@
 App-Status
 ==========
 
-[ ![Kotlin](https://img.shields.io/badge/kotlin-1.6.21-blue.svg)](http://kotlinlang.org)
+[ ![Kotlin](https://img.shields.io/badge/kotlin-1.7.10-blue.svg)](http://kotlinlang.org)
 [![Gradle Build](https://github.com/araqnid/app-status/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/araqnid/app-status/actions/workflows/gradle-build.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/org.araqnid.app-status/app-status-core.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.araqnid.app-status%22)
 
