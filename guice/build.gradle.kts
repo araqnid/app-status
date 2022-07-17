@@ -10,7 +10,7 @@ project.description = "Guice add-on for building status components with dependen
 
 dependencies {
     api(project(":core"))
-    api("com.google.inject:guice:4.2.1")
+    api("com.google.inject:guice:5.1.0")
     implementation(kotlin("reflect"))
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.araqnid.kotlin.assert-that:assert-that:0.1.1")
