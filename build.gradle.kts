@@ -14,3 +14,12 @@ subprojects {
         mavenCentral()
     }
 }
+
+allprojects {
+    afterEvaluate {
+        extensions.findByType<com.github.gradle.node.NodeExtension>()?.apply {
+            version.set(properties["nodejs.version"]?.toString() ?: error("'nodejs.version' property not set"))
+            download.set(true)
+        }
+    }
+}
