@@ -19,7 +19,7 @@ configurations {
 }
 
 dependencies {
-    val slf4jVersion = "1.7.36"
+    val slf4jVersion = "2.0.0"
     val jettyVersion = "11.0.11"
     constraints {
         add("implementation", "org.slf4j:slf4j-api") {
